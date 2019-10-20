@@ -15,7 +15,7 @@
 
 <script type="text/javascript">
     var nodeItems = <%-JSON.stringify(nodeItems)%>;
-    var relationsItems = <%-JSON.stringify(relationItems).replace(/sourceId/g,'from').replace(/destinationId/g,'to')%>;
+    var relationsItems = <%-JSON.stringify(relationItems)%>;
 
   // create node list from rows
   var nodes = new vis.DataSet(nodeItems);

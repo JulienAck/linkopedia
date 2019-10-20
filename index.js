@@ -21,39 +21,48 @@ function connectMysql(err) {
     console.log('Mysql connected...');
 }
 
-function getHomePage(req,res) {
+function sendHomePage(req,res) {
     console.log('HP called');
     res.send('hi there');
 }
 
-function getRelations(req,res) {
+function getRelationsFromRelations(arrRelations,callback) {
+    let relationSources = arrRelations.toString();
+    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
+    mysqlConnexion.query(sqlRelations,[relationSources],(err,relations) => {
+        if (err) throw err;
+        callback(relations);
+    });
+}
+
+function getEntities(arrEntities,callback) {
+    console.log(arrEntities);
+    let entitiesSources = arrEntities.toString();
+    let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label FROM entities e WHERE e.id IN ("+ entitiesSources +");";
+    console.log(sqlEntities);
+    mysqlConnexion.query(sqlEntities,[entitiesSources],(err,entities) => {
+        if (err) throw err;
+        callback(entities);
+    });
+}
+
+function sendRelations(req,res) {
     let searchId = req.params.id;
     if(parseInt(searchId)==searchId) {
-
-        let sqlRelationsLevel2 = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN (SELECT DISTINCT r.entity_source_id FROM relations r WHERE r.entity_source_id="+searchId+" OR r.entity_destination_id="+searchId+") OR r.entity_destination_id IN (SELECT DISTINCT r.entity_destination_id FROM relations r WHERE r.entity_source_id="+searchId+" OR r.entity_destination_id="+searchId+")";
-        console.log(sqlRelationsLevel2);
-        let queryRelationsLevel2 = mysqlConnexion.query(sqlRelationsLevel2,(err,relationsLevel2) => {
-            if (err) throw err;
-            let entityIdsLevel2 = ""+searchId;
-            relationsLevel2.forEach(function(item){entityIdsLevel2+=(","+item.sourceId+","+item.destinationId)});
-            let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label FROM entities e WHERE e.id IN ("+entityIdsLevel2+");";
-            console.log(sqlEntities);
-            let queryEntities = mysqlConnexion.query(sqlEntities,(err,entities) => {
-                if (err) throw err;
-                let sqlRelationsLevel1 = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+entityIdsLevel2+") OR r.entity_destination_id IN ("+entityIdsLevel2+")";
-                console.log(sqlRelationsLevel1);
-                let queryRelationsLevel1 = mysqlConnexion.query(sqlRelationsLevel1,(err,relationsLevel1) => {
-                    if (err) throw err;
-                    let entityIdsLevel1 = ""+searchId;
-                    relationsLevel1.forEach(function(item){entityIdsLevel1+=(","+item.sourceId+","+item.destinationId)});
-                    res.render('pages/relations',{nodeItems: entities, relationItems: relationsLevel1});
-                });
+        let arrRelations = [];
+        arrRelations.push(searchId);
+        getRelationsFromRelations(arrRelations,function(relations){
+            console.log(relations);
+            relationList = ""+searchId;
+            relations.forEach(function(item){relationList+=(","+item.sourceId+","+item.destinationId)});
+            console.log(relationList);
+            getEntities(relationList,function(entities) {
+                console.log(entities);
+                relations=JSON.parse(JSON.stringify(relations).replace(/sourceId/g,'from').replace(/destinationId/g,'to'));
+                res.render('pages/relations',{nodeItems: entities, relationItems: relations});
             });
         });
-    } else {
-        throw ("Invalid id");
     }
-
 }
 
 //DB Connect
@@ -64,8 +73,8 @@ app.use(express.static(path.join(__dirname, 'public')))
     .use('/javascript/vis-network', express.static(__dirname + '/node_modules/vis-network/dist/'))
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
-    .get('/', getHomePage)
-    .get('/relations/:id',getRelations);
+    .get('/', sendHomePage)
+    .get('/relations/:id',sendRelations);
 
 
 app.listen('3000',serverListens());
