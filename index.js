@@ -29,14 +29,25 @@ function getHomePage(req,res) {
 function getRelations(req,res) {
     let searchId = req.params.id;
     if(parseInt(searchId)==searchId) {
-        let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label FROM entities e, relations r WHERE (e.id=r.entity_source_id AND r.entity_destination_id="+searchId+") OR (e.id=r.entity_destination_id AND r.entity_source_id="+searchId+") OR e.id="+searchId;
-        let queryEntities = mysqlConnexion.query(sqlEntities,(err,entities) => {
+
+        let sqlRelationsLevel2 = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN (SELECT DISTINCT r.entity_source_id FROM relations r WHERE r.entity_source_id="+searchId+" OR r.entity_destination_id="+searchId+") OR r.entity_destination_id IN (SELECT DISTINCT r.entity_destination_id FROM relations r WHERE r.entity_source_id="+searchId+" OR r.entity_destination_id="+searchId+")";
+        console.log(sqlRelationsLevel2);
+        let queryRelationsLevel2 = mysqlConnexion.query(sqlRelationsLevel2,(err,relationsLevel2) => {
             if (err) throw err;
-            console.log(JSON.stringify(entities));
-            let sqlEntities = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM entities e, relations r WHERE r.entity_source_id="+searchId+" OR r.entity_destination_id="+searchId;
-            let queryEntities = mysqlConnexion.query(sqlEntities,(err,relations) => {
+            let entityIdsLevel2 = ""+searchId;
+            relationsLevel2.forEach(function(item){entityIdsLevel2+=(","+item.sourceId+","+item.destinationId)});
+            let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label FROM entities e WHERE e.id IN ("+entityIdsLevel2+");";
+            console.log(sqlEntities);
+            let queryEntities = mysqlConnexion.query(sqlEntities,(err,entities) => {
                 if (err) throw err;
-                res.render('pages/relations',{nodeItems: entities, relationItems: relations});
+                let sqlRelationsLevel1 = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+entityIdsLevel2+") OR r.entity_destination_id IN ("+entityIdsLevel2+")";
+                console.log(sqlRelationsLevel1);
+                let queryRelationsLevel1 = mysqlConnexion.query(sqlRelationsLevel1,(err,relationsLevel1) => {
+                    if (err) throw err;
+                    let entityIdsLevel1 = ""+searchId;
+                    relationsLevel1.forEach(function(item){entityIdsLevel1+=(","+item.sourceId+","+item.destinationId)});
+                    res.render('pages/relations',{nodeItems: entities, relationItems: relationsLevel1});
+                });
             });
         });
     } else {

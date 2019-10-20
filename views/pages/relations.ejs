@@ -3,8 +3,8 @@
 <script type="text/javascript" src="/javascript/vis-network/vis-network.min.js"></script>
 <style type="text/css">
     #mynetwork {
-      width: 600px;
-      height: 400px;
+      width: 100%;
+      height: 100%;
       border: 1px solid lightgray;
     }
   </style>
@@ -16,8 +16,6 @@
 <script type="text/javascript">
     var nodeItems = <%-JSON.stringify(nodeItems)%>;
     var relationsItems = <%-JSON.stringify(relationItems).replace(/sourceId/g,'from').replace(/destinationId/g,'to')%>;
-    console.log(nodeItems);
-    console.log(relationsItems);
 
   // create node list from rows
   var nodes = new vis.DataSet(nodeItems);
