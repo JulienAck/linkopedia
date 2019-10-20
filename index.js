@@ -6,8 +6,8 @@ const app = express();
 // DB setup
 const mysqlConnexion = mysql.createConnection({
     host: "localhost",
-    user: "tester",
-    password: "passtester",
+    user: "wordpress",
+    password: "123456",
     database: "linkopedia"
 });
 
@@ -30,7 +30,7 @@ function getHomePage(req,res) {
 function getRelations(req,res) {
     let searchId = req.params.id;
     if(parseInt(searchId)==searchId) {
-        let sql = "SELECT e.name as entityName,r.name as relationName FROM entities e, relations r WHERE (e.id=r.source_id AND r.destination_id="+searchId+") OR (e.id=r.destination_id AND r.source_id="+searchId+")";
+        let sql = "SELECT e.name as entityName,r.name as relationName FROM entities e, relations r WHERE (e.id=r.entity_source_id AND r.entity_destination_id="+searchId+") OR (e.id=r.entity_destination_id AND r.entity_source_id="+searchId+")";
         let query = mysqlConnexion.query(sql,(err,rows,fields) => {
             if (err) throw err;
             console.log(JSON.stringify(rows));
