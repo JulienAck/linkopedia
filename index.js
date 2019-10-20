@@ -10,6 +10,22 @@ const mysqlConnexion = mysql.createConnection({
     database: "linkopedia"
 });
 
+function cleanArrayOfObjects(arrOfObj) {
+    for (var i=0; i<arrOfObj.length; i++) {
+        arrOfObj[i] = cleanObject(arrOfObj[i]);
+    }
+    return arrOfObj;
+}
+
+function cleanObject(obj) {
+    for (var propName in obj) { 
+        if (obj[propName] == null) {
+            delete obj[propName];
+        }
+    }
+    return obj;
+}
+
 function serverListens() {
     console.log('server listening..');
 }
@@ -29,27 +45,18 @@ function sendHomePage(req,res) {
 function getEntities(arrEntities,callback) {
     console.log(arrEntities);
     let entitiesSources = arrEntities.toString();
-    let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label FROM entities e WHERE e.id IN ("+ entitiesSources +");";
-    console.log(sqlEntities);
+    let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label, e.shape as shape, e.color as color, e.size as size, e.image as image FROM entities e WHERE e.id IN ("+ entitiesSources +");";
     mysqlConnexion.query(sqlEntities,[entitiesSources],(err,entities) => {
         if (err) throw err;
         callback(entities);
     });
 }
 
-function getRelationsFromRelations(arrRelations,callback) {
-    let relationSources = arrRelations.toString();
-    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
-    mysqlConnexion.query(sqlRelations,[relationSources],(err,relations) => {
-        if (err) throw err;
-        callback(relations);
-    });
-}
-
 function getRelationsLoop(arrRelations,iterations,counter,callback) {
+    //this function calls itself to enrich the array of relations as many times a iterations says. 
     counter++;
     let relationSources = arrRelations.toString();
-    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
+    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId, r.name as label FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
     mysqlConnexion.query(sqlRelations,[relationSources],(err,relations) => {
         if (err) throw err;
         if (counter<iterations) {
@@ -58,7 +65,6 @@ function getRelationsLoop(arrRelations,iterations,counter,callback) {
                 relationList.push(item.sourceId);
                 relationList.push(item.destinationId);
             });
-            console.log()
             getRelationsLoop(relationList,iterations,counter,callback);
         } else {
             callback(relations);
@@ -71,15 +77,14 @@ function sendRelations(req,res) {
     if(parseInt(searchId)==searchId) {
         let arrRelations = [];
         arrRelations.push(searchId);
-        //getRelationsFromRelations(arrRelations,function(relations){
-        getRelationsLoop(arrRelations,3,0,function(relations){
-            console.log(relations);
+        getRelationsLoop(arrRelations,4,0,function(relations){
             relationList = ""+searchId;
             relations.forEach(function(item){relationList+=(","+item.sourceId+","+item.destinationId)});
-            console.log(relationList);
             getEntities(relationList,function(entities) {
+                entities = cleanArrayOfObjects(entities);
+                relations = cleanArrayOfObjects(JSON.parse(JSON.stringify(relations).replace(/sourceId/g,'from').replace(/destinationId/g,'to')));
+                console.log(relations);
                 console.log(entities);
-                relations=JSON.parse(JSON.stringify(relations).replace(/sourceId/g,'from').replace(/destinationId/g,'to'));
                 res.render('pages/relations',{nodeItems: entities, relationItems: relations});
             });
         });
