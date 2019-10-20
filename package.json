@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^2.7.1",
     "express": "^4.17.1",
     "mysql": "^2.17.1",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "vis-network": "^6.1.1"
   }
 }

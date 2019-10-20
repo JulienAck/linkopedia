@@ -1,7 +1,6 @@
 const express = require ('express');
 const mysql = require ('mysql');
-
-const app = express();
+const path = require ('path');
 
 // DB setup
 const mysqlConnexion = mysql.createConnection({
@@ -30,12 +29,15 @@ function getHomePage(req,res) {
 function getRelations(req,res) {
     let searchId = req.params.id;
     if(parseInt(searchId)==searchId) {
-        let sql = "SELECT e.name as entityName,r.name as relationName FROM entities e, relations r WHERE (e.id=r.entity_source_id AND r.entity_destination_id="+searchId+") OR (e.id=r.entity_destination_id AND r.entity_source_id="+searchId+")";
-        let query = mysqlConnexion.query(sql,(err,rows,fields) => {
+        let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label FROM entities e, relations r WHERE (e.id=r.entity_source_id AND r.entity_destination_id="+searchId+") OR (e.id=r.entity_destination_id AND r.entity_source_id="+searchId+") OR e.id="+searchId;
+        let queryEntities = mysqlConnexion.query(sqlEntities,(err,entities) => {
             if (err) throw err;
-            console.log(JSON.stringify(rows));
-            console.log(JSON.stringify(fields));
-            res.json(rows);
+            console.log(JSON.stringify(entities));
+            let sqlEntities = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM entities e, relations r WHERE r.entity_source_id="+searchId+" OR r.entity_destination_id="+searchId;
+            let queryEntities = mysqlConnexion.query(sqlEntities,(err,relations) => {
+                if (err) throw err;
+                res.render('pages/relations',{nodeItems: entities, relationItems: relations});
+            });
         });
     } else {
         throw ("Invalid id");
@@ -46,6 +48,13 @@ function getRelations(req,res) {
 //DB Connect
 mysqlConnexion.connect(connectMysql);
 
-app.get('/',getHomePage);
-app.get('/relations/:id',getRelations);
+const app = express();
+app.use(express.static(path.join(__dirname, 'public')))
+    .use('/javascript/vis-network', express.static(__dirname + '/node_modules/vis-network/dist/'))
+    .set('views', path.join(__dirname, 'views'))
+    .set('view engine', 'ejs')
+    .get('/', getHomePage)
+    .get('/relations/:id',getRelations);
+
+
 app.listen('3000',serverListens());
