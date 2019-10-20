@@ -26,15 +26,6 @@ function sendHomePage(req,res) {
     res.send('hi there');
 }
 
-function getRelationsFromRelations(arrRelations,callback) {
-    let relationSources = arrRelations.toString();
-    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
-    mysqlConnexion.query(sqlRelations,[relationSources],(err,relations) => {
-        if (err) throw err;
-        callback(relations);
-    });
-}
-
 function getEntities(arrEntities,callback) {
     console.log(arrEntities);
     let entitiesSources = arrEntities.toString();
@@ -46,12 +37,42 @@ function getEntities(arrEntities,callback) {
     });
 }
 
+function getRelationsFromRelations(arrRelations,callback) {
+    let relationSources = arrRelations.toString();
+    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
+    mysqlConnexion.query(sqlRelations,[relationSources],(err,relations) => {
+        if (err) throw err;
+        callback(relations);
+    });
+}
+
+function getRelationsLoop(arrRelations,iterations,counter,callback) {
+    counter++;
+    let relationSources = arrRelations.toString();
+    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
+    mysqlConnexion.query(sqlRelations,[relationSources],(err,relations) => {
+        if (err) throw err;
+        if (counter<iterations) {
+            relationList = [];
+            relations.forEach(function(item){
+                relationList.push(item.sourceId);
+                relationList.push(item.destinationId);
+            });
+            console.log()
+            getRelationsLoop(relationList,iterations,counter,callback);
+        } else {
+            callback(relations);
+        }
+    });
+}
+
 function sendRelations(req,res) {
     let searchId = req.params.id;
     if(parseInt(searchId)==searchId) {
         let arrRelations = [];
         arrRelations.push(searchId);
-        getRelationsFromRelations(arrRelations,function(relations){
+        //getRelationsFromRelations(arrRelations,function(relations){
+        getRelationsLoop(arrRelations,3,0,function(relations){
             console.log(relations);
             relationList = ""+searchId;
             relations.forEach(function(item){relationList+=(","+item.sourceId+","+item.destinationId)});
