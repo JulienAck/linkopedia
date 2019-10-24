@@ -1,16 +1,18 @@
 const express = require ('express');
-const mysql = require ('mysql');
+const pg = require('pg');
 const path = require ('path');
 
 // DB setup
-const mysqlConnexion = mysql.createConnection({
+const dbConnexion = new pg.Pool({
     host: "localhost",
-    user: "wordpress",
-    password: "123456",
-    database: "linkopedia"
+    user: "postgres",
+    password: "dbpass654",
+    database: "linkopedia",
+    port: 5432,
 });
 
 function cleanArrayOfObjects(arrOfObj) {
+    console.log('cleanArrayOfObjects');
     for (var i=0; i<arrOfObj.length; i++) {
         arrOfObj[i] = cleanObject(arrOfObj[i]);
     }
@@ -18,6 +20,7 @@ function cleanArrayOfObjects(arrOfObj) {
 }
 
 function cleanObject(obj) {
+    console.log('cleanObject');
     for (var propName in obj) { 
         if (obj[propName] == null) {
             delete obj[propName];
@@ -27,52 +30,64 @@ function cleanObject(obj) {
 }
 
 function serverListens() {
-    console.log('server listening..');
+    console.log('serverListens');
 }
 
-function connectMysql(err) {
+function connectSql(err) {
+    console.log('connectSql');
     if (err) {
         throw err;
     }
-    console.log('Mysql connected...');
+    console.log('Postgres connected...');
 }
 
 function sendHomePage(req,res) {
-    console.log('HP called');
+    console.log('sendHomePage');
     res.send('hi there');
 }
 
-function getEntities(arrEntities,callback) {
-    console.log(arrEntities);
-    let entitiesSources = arrEntities.toString();
-    let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label, e.shape as shape, e.color as color, e.size as size, e.image as image FROM entities e WHERE e.id IN ("+ entitiesSources +");";
-    mysqlConnexion.query(sqlEntities,[entitiesSources],(err,entities) => {
+function sendEntitiesIndex(req,res) {
+    console.log('sendEntitiesIndex');
+    let sqlAllEntities = "SELECT * FROM entities LIMIT 1000" ;
+    dbConnexion.query(sqlAllEntities,(err,entities) => {
         if (err) throw err;
-        callback(entities);
+        res.render('pages/entitiesIndex',{entitiesItems: entities});
+    });    
+}
+
+function getEntities(arrEntities,callback) {
+    console.log('getEntities');
+    let entitiesSources = arrEntities.toString();
+    let sqlEntities = "SELECT DISTINCT e.id as id, e.name as label FROM entities e WHERE e.id IN ($1);";
+    dbConnexion.query(sqlEntities,[entitiesSources],(err,entities) => {
+        if (err) throw err;
+        callback(entities.rows);
     });
 }
 
 function getRelationsLoop(arrRelations,iterations,counter,callback) {
+    console.log('getRelationsLoop');
     //this function calls itself to enrich the array of relations as many times a iterations says. 
     counter++;
     let relationSources = arrRelations.toString();
-    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId, r.name as label FROM relations r WHERE r.entity_source_id IN ("+ relationSources +") OR r.entity_destination_id IN ("+ relationSources +");";
-    mysqlConnexion.query(sqlRelations,[relationSources],(err,relations) => {
+    let sqlRelations = "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN ($1) OR r.entity_destination_id IN ($1);";
+    dbConnexion.query(sqlRelations,[relationSources],(err,relations) => {
         if (err) throw err;
-        if (counter<iterations) {
+        if (relations.rows.length>0&&counter<iterations) {
             relationList = [];
-            relations.forEach(function(item){
+            relations.rows.forEach(function(item){
                 relationList.push(item.sourceId);
                 relationList.push(item.destinationId);
             });
             getRelationsLoop(relationList,iterations,counter,callback);
         } else {
-            callback(relations);
+            callback(relations.rows);
         }
     });
 }
 
-function sendRelations(req,res) {
+function sendRelationsById(req,res) {
+    console.log('sendRelationsById');
     let searchId = req.params.id;
     if(parseInt(searchId)==searchId) {
         let arrRelations = [];
@@ -92,7 +107,7 @@ function sendRelations(req,res) {
 }
 
 //DB Connect
-mysqlConnexion.connect(connectMysql);
+dbConnexion.connect(connectSql);
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')))
@@ -100,7 +115,8 @@ app.use(express.static(path.join(__dirname, 'public')))
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
     .get('/', sendHomePage)
-    .get('/relations/:id',sendRelations);
+    .get('/relations/:id',sendRelationsById)
+    .get('/entities/',sendEntitiesIndex);
 
 
 app.listen('3000',serverListens());

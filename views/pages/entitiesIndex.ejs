@@ -1,0 +1,15 @@
+<html>
+<head>
+<script type="text/javascript" src="/javascript/vis-network/vis-network.min.js"></script>
+<style type="text/css">
+</style>
+</head>
+<body>
+    <ul>
+    <% for (var i=0; i<entitiesItems.length; i++) { %>
+        <li><a href='/relations/<%-entitiesItems[i].id%>'><%-entitiesItems[i].name %></a></li>
+    <% } %>
+    </ul>
+
+</body>
+</html>
