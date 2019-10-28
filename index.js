@@ -2,14 +2,7 @@ const express = require ('express');
 const pg = require('pg');
 const path = require ('path');
 
-// DB setup
-const dbConnexion = new pg.Pool({
-    host: "localhost",
-    user: "postgres",
-    password: "dbpass654",
-    database: "linkopedia",
-    port: 5432,
-});
+
 
 function cleanArrayOfObjects(arrOfObj) {
     console.log('cleanArrayOfObjects');
@@ -111,7 +104,28 @@ function sendRelationsById(req,res) {
     }
 }
 
+function setDBConnexion() {
+    if (process.env.DATABASE_URL) {
+        console.log(process.env.DATABASE_URL);
+        var dbConnexion = new pg.Pool({
+            connectionString: process.env.DATABASE_URL,
+            ssl: true
+        });
+    } else {
+        var dbConnexion = new pg.Pool({
+            host: "localhost",
+            user: "postgres",
+            password: "dbpass654",
+            database: "linkopedia",
+            port: 5432,
+        });
+    }
+    return dbConnexion;
+}
+
 //DB Connect
+// DB setup
+var dbConnexion = setDBConnexion();
 dbConnexion.connect(connectSql);
 
 const app = express();
