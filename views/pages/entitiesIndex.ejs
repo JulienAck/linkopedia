@@ -1,13 +1,49 @@
 <html>
 <head>
 <script type="text/javascript" src="/javascript/vis-network/vis-network.min.js"></script>
+<script>
+    function showEditBox(id) {
+        var editBoxToShow = document.getElementById('edit-box-'+id);
+        if (editBoxToShow != undefined) {
+            editBoxToShow.style.display = "block";
+        }
+    }
+</script>
 <style type="text/css">
+.edit-box {
+    display:none;
+}
 </style>
 </head>
 <body>
+    <h1>Entités</h1>
+    <form action="/insertEntity" method="post">
+        <input type="text" name="name" />
+        <select name="entityTypeId">
+                <option value="">Aucune</option>
+                <% for (var i=0; i<entityTypes.length; i++) { %>
+                    <option value="<%-entityTypes[i].id %>"><%-entityTypes[i].name %></option>
+                <% } %>
+        </select>
+        <input type="submit" value="Créer" />
+    </form>
     <ul>
     <% for (var i=0; i<entitiesItems.length; i++) { %>
-        <li><a href='/relations/<%-entitiesItems[i].id%>'><%-entitiesItems[i].name %></a></li>
+        <li>
+            <%-entitiesItems[i].name %> | <a href='/relations/<%-entitiesItems[i].id%>'>carte</a> | <a href='#' onclick='showEditBox(<%-entitiesItems[i].id %>);'>éditer</a>
+            <div id="edit-box-<%-entitiesItems[i].id %>" class="edit-box">
+                    <form action="/entities/<%-entitiesItems[i].id %>" method="post">
+                        <input type="text" name="name" value="<%-entitiesItems[i].name %>"/>
+                        <select name="entityTypeId">
+                                <option value="">Aucune</option>
+                                <% for (var j=0; j<entityTypes.length; j++) { %>
+                                    <option value="<%-entityTypes[j].id %>" <% if (entityTypes[j].id==entitiesItems[i].entity_type_id) { %> selected <% } %>><%-entityTypes[j].name %></option>
+                                <% } %>
+                        </select>
+                        <input type="submit" value="Enregistrer" />
+                    </form>
+            </div>
+        </li>
     <% } %>
     </ul>
 

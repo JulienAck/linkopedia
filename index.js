@@ -1,8 +1,7 @@
 const express = require ('express');
 const pg = require('pg');
+const bodyParser = require('body-parser');
 const path = require ('path');
-
-
 
 function cleanArrayOfObjects(arrOfObj) {
     console.log('cleanArrayOfObjects');
@@ -39,12 +38,35 @@ function sendHomePage(req,res) {
 
 function sendEntitiesIndex(req,res) {
     console.log('sendEntitiesIndex');
+    let sqlAllEntityTypes = "SELECT * FROM entity_type LIMIT 1000" ;
+    console.log(sqlAllEntityTypes);
     let sqlAllEntities = "SELECT * FROM entities LIMIT 1000" ;
     console.log(sqlAllEntities);
     dbConnexion.query(sqlAllEntities,(err,entities) => {
         if (err) throw err;
-        res.render('pages/entitiesIndex',{entitiesItems: entities.rows});
+        dbConnexion.query(sqlAllEntityTypes,(err,entityTypes) => {
+            res.render('pages/entitiesIndex',{entitiesItems: entities.rows, entityTypes: entityTypes.rows});
+        });
     });    
+}
+
+function insertEntity(req,res) {
+    console.log('insertEntity');
+    console.log(req.body);
+    dbConnexion.query("INSERT INTO entities (name,entity_type_id) VALUES ($1, $2)",[req.body.name,req.body.entityTypeId],(err,sqlResult) => {
+        if (err) throw err;
+        console.log(sqlResult.rows);
+        res.redirect('/entities/');
+    });
+}
+
+function updateEntity(req,res) {
+    console.log('updateEntity '+req.params.id+" "+req.body.name+" "+req.body.entityTypeId);
+    dbConnexion.query("UPDATE entities SET name=$2, entity_type_id=$3 WHERE id=$1",[req.params.id,req.body.name,req.body.entityTypeId],(err,sqlResult) => {
+        if (err) throw err;
+        console.log(sqlResult.rows);
+        res.redirect('/entities/');
+    });
 }
 
 function getEntities(arrEntities,callback) {
@@ -124,15 +146,18 @@ function setDBConnexion() {
 }
 
 //DB Connect
-// DB setup
 var dbConnexion = setDBConnexion();
 dbConnexion.connect(connectSql);
 
+//App settings and routes
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')))
     .use('/javascript/vis-network', express.static(__dirname + '/node_modules/vis-network/dist/'))
+    .use(bodyParser.urlencoded({extended: true}))
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
+    .post('/insertEntity',insertEntity)
+    .post('/entities/:id',updateEntity)
     .get('/', sendHomePage)
     .get('/relations/:id',sendRelationsById)
     .get('/entities/',sendEntitiesIndex);
