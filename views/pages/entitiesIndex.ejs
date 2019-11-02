@@ -1,11 +1,14 @@
 <html>
 <head>
-<script type="text/javascript" src="/javascript/vis-network/vis-network.min.js"></script>
 <script>
     function showEditBox(id) {
         var editBoxToShow = document.getElementById('edit-box-'+id);
         if (editBoxToShow != undefined) {
-            editBoxToShow.style.display = "block";
+            if (window.getComputedStyle(editBoxToShow, null).getPropertyValue("display")== "none") { 
+                editBoxToShow.style.display = "block"; 
+            } else {
+                editBoxToShow.style.display = "none"; 
+            }
         }
     }
 </script>

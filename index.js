@@ -38,9 +38,9 @@ function sendHomePage(req,res) {
 
 function sendEntitiesIndex(req,res) {
     console.log('sendEntitiesIndex');
-    let sqlAllEntityTypes = "SELECT * FROM entity_type LIMIT 1000" ;
+    let sqlAllEntityTypes = "SELECT * FROM entity_type ORDER BY id DESC LIMIT 1000" ;
     console.log(sqlAllEntityTypes);
-    let sqlAllEntities = "SELECT * FROM entities LIMIT 1000" ;
+    let sqlAllEntities = "SELECT * FROM entities ORDER BY id DESC LIMIT 1000" ;
     console.log(sqlAllEntities);
     dbConnexion.query(sqlAllEntities,(err,entities) => {
         if (err) throw err;
@@ -106,6 +106,16 @@ function getRelationsLoop(arrRelations,iterations,counter,callback) {
     });
 }
 
+function sendRelationsIndex(req,res) {
+    console.log('sendRelationsIndex');
+    let sqlAllRelations = "SELECT e1.name as source_name, e2.name as destination_name, r.* FROM entities e1, entities e2, relations r WHERE r.entity_source_id=e1.id AND r.entity_destination_id=e2.id ORDER BY r.id DESC LIMIT 1000" ;
+    console.log(sqlAllRelations);
+    dbConnexion.query(sqlAllRelations,(err,relations) => {
+        if (err) throw err;
+        res.render('pages/relationsIndex',{relationsItems: relations.rows});
+    }); 
+}
+
 function sendRelationsById(req,res) {
     console.log('sendRelationsById');
     let searchId = req.params.id;
@@ -160,6 +170,7 @@ app.use(express.static(path.join(__dirname, 'public')))
     .post('/entities/:id',updateEntity)
     .get('/', sendHomePage)
     .get('/relations/:id',sendRelationsById)
+    .get('/relations/',sendRelationsIndex)
     .get('/entities/',sendEntitiesIndex);
 
 // -- it begins here --//
