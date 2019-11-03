@@ -1,16 +1,10 @@
+require('dotenv').config()
 const express = require("express");
-const pg = require("pg");
 const bodyParser = require("body-parser");
 const path = require("path");
 
 function serverListens() {
   console.log("serverListens on " + serverPort);
-}
-
-function connectSql(err) {
-  console.log("connectSql");
-  if (err) throw err;
-  console.log("Postgres connected...");
 }
 
 function sendHomePage(req, res) {
