@@ -1,9 +1,26 @@
 <html>
+  <head>
+    <script
+      type="text/javascript"
+      src="/javascript/vis-network/vis-network.min.js"
+    ></script>
+    <script type="text/javascript" src="/javascript/ui-functions.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+  </head>
   <body>
-    <h1>Linkopedia</h1>
-    <ul>
-      <a href="/entities/">Entités</a>
-      <a href="/relations/">Relations</a>
-    </ul>
+    <div class="main-column">
+      <% include ../partials/menu %>
+      <div id="current-network"></div>
+      <div id="editor-window">
+
+      </div>
+      <br class="clear-both" />
+    </div>
+
+    <script type="text/javascript">
+      getAndDrawNetworkFromEntityId(10, "current-network");
+      getAndListEntities("editor-window");
+    </script>
   </body>
 </html>

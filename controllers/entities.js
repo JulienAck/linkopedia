@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const dbConnexion = require("./database");
 
-function sendEntitiesIndex(req, res) {
-  console.log("sendEntitiesIndex");
+function listSendEntitiesIndex(req, res) {
+  console.log("listSendEntitiesIndex");
   let sqlAllEntityTypes =
     "SELECT * FROM entity_type ORDER BY id ASC LIMIT 1000";
   console.log(sqlAllEntityTypes);
@@ -13,7 +13,7 @@ function sendEntitiesIndex(req, res) {
   dbConnexion.query(sqlAllEntities, (err, entities) => {
     if (err) throw err;
     dbConnexion.query(sqlAllEntityTypes, (err, entityTypes) => {
-      res.render("pages/entitiesIndex", {
+        res.render("pages/entitiesList", {
         entitiesItems: entities.rows,
         entityTypes: entityTypes.rows
       });
@@ -30,7 +30,7 @@ function insertEntity(req, res) {
     (err, sqlResult) => {
       if (err) throw err;
       console.log(sqlResult.rows);
-      res.redirect("/entities/");
+      res.redirect("/");
     }
   );
 }
@@ -51,13 +51,13 @@ function updateEntity(req, res) {
     (err, sqlResult) => {
       if (err) throw err;
       console.log(sqlResult.rows);
-      res.redirect("/entities/");
+      res.redirect("/");
     }
   );
 }
 
 router.post("/insertEntity", insertEntity);
 router.post("/updateEntity/:id", updateEntity);
-router.get("/", sendEntitiesIndex);
+router.get("/list/", listSendEntitiesIndex);
 
 module.exports = router;

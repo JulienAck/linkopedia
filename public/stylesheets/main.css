@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  font-family: Helvetica, Arial;
+  font-size: 1em;
+  color: #333;
+}
+li {
+  padding: 5px;
+  list-style-type: none;
+}
+h1 {
+  margin: 5px;
+}
+.clear-both {
+  clear: both;
+}
+#top-menu {
+    width:100%;
+    text-align:right;
+}
+.main-column {
+  margin: 0px 0px 0px 10px;
+  border-left: 1px solid #999;
+  padding: 0px 20px 0px 20px;
+  width: 90%;
+  margin: 0px auto 0px auto;
+  background: #fff;
+}
+.edit-box {
+  display: none;
+}
+#current-network {
+  width: 65%;
+  height: 80%;
+  float: left;
+  background: #eee;
+}
+#editor-window {
+  width: 30%;
+  height: 80%;
+  margin-left:10px;
+  padding-left:10px;
+  border-left: 1px solid lightgray;
+  float: right;
+}

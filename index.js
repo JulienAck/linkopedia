@@ -1,4 +1,4 @@
-require('dotenv').config()
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -9,7 +9,8 @@ function serverListens() {
 
 function sendHomePage(req, res) {
   console.log("sendHomePage");
-  res.render("pages/index");
+  let relationItems = {};
+  res.render("pages/index", { relationItems: relationItems });
 }
 
 //App settings and routes

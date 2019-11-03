@@ -1,0 +1,28 @@
+<h1>Entités</h1>
+        <form action="/entities/insertEntity" method="post">
+            <input type="text" name="name" />
+            <select name="entityTypeId">
+                    <% for (var i=0; i<entityTypes.length; i++) { %>
+                        <option value="<%-entityTypes[i].id %>"><%-entityTypes[i].name %></option>
+                    <% } %>
+            </select>
+            <input type="submit" value="Créer" />
+        </form>
+        <ul>
+        <% for (var i=0; i<entitiesItems.length; i++) { %>
+            <li>
+                <%-entitiesItems[i].name %> | <a href='#' onclick='getAndDrawNetworkFromEntityId(<%-entitiesItems[i].id %>,"current-network");'>carte</a> | <a href='#' onclick='showEditBox(<%-entitiesItems[i].id %>);'>éditer</a>
+                <div id="edit-box-<%-entitiesItems[i].id %>" class="edit-box">
+                        <form action="/entities/updateEntity/<%-entitiesItems[i].id %>" method="post">
+                            <input type="text" name="name" value="<%-entitiesItems[i].name %>"/>
+                            <select name="entityTypeId">
+                                    <% for (var j=0; j<entityTypes.length; j++) { %>
+                                        <option value="<%-entityTypes[j].id %>" <% if (entityTypes[j].id==entitiesItems[i].entity_type_id) { %> selected <% } %>><%-entityTypes[j].name %></option>
+                                    <% } %>
+                            </select>
+                            <input type="submit" value="Enregistrer" />
+                        </form>
+                </div>
+            </li>
+        <% } %>
+        </ul>
