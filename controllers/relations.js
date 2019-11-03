@@ -60,7 +60,7 @@ function getRelationsEntities(arrEntities, callback) {
   console.log("getEntities");
   let entitiesSources = arrEntities.toString();
   let sqlEntities =
-    "SELECT DISTINCT e.id as id, e.name as label, et.default_shape as shape, et.default_image_url as image FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id IN (" +
+    "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profileImage, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id IN (" +
     entitiesSources +
     ");";
   console.log(sqlEntities);
@@ -121,37 +121,6 @@ function listSendRelationsIndex(req, res) {
   });
 }
 
-function sendRelationsById(req, res) {
-  console.log("sendRelationsById");
-  let searchId = req.params.id;
-  if (parseInt(searchId) == searchId) {
-    let arrRelations = [];
-    arrRelations.push(searchId);
-    getRelationsLoop(arrRelations, 4, 0, function(relations) {
-      relationList = "" + searchId;
-      relations.forEach(function(item) {
-        relationList += "," + item.sourceid + "," + item.destinationid;
-      });
-      getRelationsEntities(relationList, function(entities) {
-        entities = cleanArrayOfObjects(entities);
-        relations = cleanArrayOfObjects(
-          JSON.parse(
-            JSON.stringify(relations)
-              .replace(/sourceid/g, "from")
-              .replace(/destinationid/g, "to")
-          )
-        );
-        console.log(relations);
-        console.log(entities);
-        res.render("pages/relations", {
-          nodeItems: entities,
-          relationItems: relations
-        });
-      });
-    });
-  }
-}
-
 function APIsendRelationsById(req, res) {
     console.log("APIsendRelationsById");
     let searchId = req.params.id;
@@ -164,6 +133,13 @@ function APIsendRelationsById(req, res) {
           relationList += "," + item.sourceid + "," + item.destinationid;
         });
         getRelationsEntities(relationList, function(entities) {
+          entities.forEach(function(item) {
+            if (item.profileimage) {
+              item.image=item.profileimage;
+            } else {
+              item.image=item.defaultimage;
+            }
+          });
           entities = cleanArrayOfObjects(entities);
           relations = cleanArrayOfObjects(
             JSON.parse(
@@ -187,6 +163,5 @@ router.post("/insertRelation", insertRelation);
 router.post("/updateRelation/:id", updateRelation);
 router.get("/list/", listSendRelationsIndex);
 router.get("/api/:id", APIsendRelationsById);
-router.get("/:id", sendRelationsById);
 
 module.exports = router;

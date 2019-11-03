@@ -25,7 +25,7 @@ function insertEntity(req, res) {
   console.log("insertEntity");
   console.log(req.body);
   dbConnexion.query(
-    "INSERT INTO entities (name,entity_type_id) VALUES ($1, $2)",
+    "INSERT INTO entities (name,entity_type_id,profile_pic_url) VALUES ($1, $2,$3)",
     [req.body.name, req.body.entityTypeId],
     (err, sqlResult) => {
       if (err) throw err;
@@ -42,12 +42,14 @@ function updateEntity(req, res) {
       " " +
       req.body.name +
       " " +
-      req.body.entityTypeId
+      req.body.entityTypeId +
+      " " +
+      req.body.profilePicUrl
   );
-  var sqlBase = "UPDATE entities SET name=$2, entity_type_id=$3 WHERE id=$1";
+  var sqlBase = "UPDATE entities SET name=$2, entity_type_id=$3, profile_pic_url=$4 WHERE id=$1";
   dbConnexion.query(
     sqlBase,
-    [req.params.id, req.body.name, req.body.entityTypeId],
+    [req.params.id, req.body.name, req.body.entityTypeId, req.body.profilePicUrl],
     (err, sqlResult) => {
       if (err) throw err;
       console.log(sqlResult.rows);
