@@ -9,6 +9,9 @@ function sendEntitiesIndex(req,res) {
     console.log(sqlAllEntityTypes);
     let sqlAllEntities = "SELECT * FROM entities ORDER BY id DESC LIMIT 1000" ;
     console.log(sqlAllEntities);
+
+
+    
     dbConnexion.query(sqlAllEntities,(err,entities) => {
         if (err) throw err;
         dbConnexion.query(sqlAllEntityTypes,(err,entityTypes) => {
@@ -35,7 +38,6 @@ function updateEntity(req,res) {
         res.redirect('/entities/');
     });
 }
-
 
 router.post('/insertEntity',insertEntity);
 router.post('/updateEntity/:id',updateEntity);
