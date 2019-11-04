@@ -25,7 +25,7 @@ function insertEntity(req, res) {
   console.log("insertEntity");
   console.log(req.body);
   dbConnexion.query(
-    "INSERT INTO entities (name,entity_type_id,profile_pic_url) VALUES ($1, $2,$3)",
+    "INSERT INTO entities (id, name,entity_type_id,profile_pic_url) VALUES (nextval(pg_get_serial_sequence('entities', 'id')), $1, $2,$3)",
     [req.body.name, req.body.entityTypeId, req.body.profilePicUrl],
     (err, sqlResult) => {
       if (err) throw err;
