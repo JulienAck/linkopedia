@@ -26,7 +26,7 @@ function insertEntity(req, res) {
   console.log(req.body);
   dbConnexion.query(
     "INSERT INTO entities (name,entity_type_id,profile_pic_url) VALUES ($1, $2,$3)",
-    [req.body.name, req.body.entityTypeId],
+    [req.body.name, req.body.entityTypeId, req.body.profilePicUrl],
     (err, sqlResult) => {
       if (err) throw err;
       console.log(sqlResult.rows);
