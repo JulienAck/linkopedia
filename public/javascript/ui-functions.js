@@ -20,12 +20,6 @@ function drawNetwork(containerId, nodes, edges) {
     edges: edges
   };
   var options = {
-    physics: {
-      barnesHut: {
-        avoidOverlap: 1,
-        centralGravity: 0.2
-      }
-    },
     nodes: {
       size: 30,
       color: {
