@@ -57,7 +57,7 @@ function updateRelation(req, res) {
 }
 
 function getRelationsEntities(arrEntities, callback) {
-  console.log("getEntities");
+  console.log("getRelationsEntities");
   let entitiesSources = arrEntities.toString();
   let sqlEntities =
     "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profileImage, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id IN (" +
@@ -65,6 +65,23 @@ function getRelationsEntities(arrEntities, callback) {
     ");";
   console.log(sqlEntities);
   dbConnexion.query(sqlEntities, (err, entities) => {
+    if (err) throw err;
+    callback(entities.rows);
+  });
+}
+
+function getEntitiesRelations(arrEntities, callback) {
+  console.log("getEntitiesRelations");
+  let arrEntitiesId = arrEntities.map(({ id }) => id);
+  let entitiesList = arrEntitiesId.toString();
+  let sqlRelations =
+    "SELECT DISTINCT r.entity_source_id as sourceid, r.entity_destination_id as destinationid FROM relations r WHERE r.entity_source_id IN (" +
+    entitiesList +
+    ") OR r.entity_destination_id IN (" +
+    entitiesList +
+    ");";
+  console.log(sqlRelations);
+  dbConnexion.query(sqlRelations, (err, entities) => {
     if (err) throw err;
     callback(entities.rows);
   });
@@ -122,25 +139,27 @@ function listSendRelationsIndex(req, res) {
 }
 
 function APIsendRelationsById(req, res) {
-    console.log("APIsendRelationsById");
-    let searchId = req.params.id;
-    if (parseInt(searchId) == searchId) {
-      let arrRelations = [];
-      arrRelations.push(searchId);
-      getRelationsLoop(arrRelations, 4, 0, function(relations) {
-        relationList = "" + searchId;
-        relations.forEach(function(item) {
-          relationList += "," + item.sourceid + "," + item.destinationid;
+  console.log("APIsendRelationsById");
+  let searchId = req.params.id;
+  if (parseInt(searchId) == searchId) {
+    let arrRelations = [];
+    arrRelations.push(searchId);
+    getRelationsLoop(arrRelations, 1, 0, function(relations) {
+      relationList = "" + searchId;
+      relations.forEach(function(item) {
+        relationList += "," + item.sourceid + "," + item.destinationid;
+      });
+      getRelationsEntities(relationList, function(entities) {
+        entities.forEach(function(item) {
+          if (item.profileimage) {
+            item.image = item.profileimage;
+          } else {
+            item.image = item.defaultimage;
+          }
         });
-        getRelationsEntities(relationList, function(entities) {
-          entities.forEach(function(item) {
-            if (item.profileimage) {
-              item.image=item.profileimage;
-            } else {
-              item.image=item.defaultimage;
-            }
-          });
-          entities = cleanArrayOfObjects(entities);
+        entities = cleanArrayOfObjects(entities);
+        relations = getEntitiesRelations(entities, function(relations) {
+          console.log(relations);
           relations = cleanArrayOfObjects(
             JSON.parse(
               JSON.stringify(relations)
@@ -156,7 +175,8 @@ function APIsendRelationsById(req, res) {
           });
         });
       });
-    }
+    });
+  }
 }
 
 router.post("/insertRelation", insertRelation);
