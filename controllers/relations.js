@@ -144,7 +144,7 @@ function APIsendRelationsById(req, res) {
   if (parseInt(searchId) == searchId) {
     let arrRelations = [];
     arrRelations.push(searchId);
-    getRelationsLoop(arrRelations, 1, 0, function(relations) {
+    getRelationsLoop(arrRelations, 2, 0, function(relations) {
       relationList = "" + searchId;
       relations.forEach(function(item) {
         relationList += "," + item.sourceid + "," + item.destinationid;
@@ -156,10 +156,10 @@ function APIsendRelationsById(req, res) {
           } else {
             item.image = item.defaultimage;
           }
+          console.log("===="+JSON.stringify(item));
         });
         entities = cleanArrayOfObjects(entities);
         relations = getEntitiesRelations(entities, function(relations) {
-          console.log(relations);
           relations = cleanArrayOfObjects(
             JSON.parse(
               JSON.stringify(relations)
@@ -167,8 +167,8 @@ function APIsendRelationsById(req, res) {
                 .replace(/destinationid/g, "to")
             )
           );
-          console.log(relations);
-          console.log(entities);
+          //console.log(relations);
+          //console.log(entities);
           res.send({
             nodeItems: entities,
             relationItems: relations

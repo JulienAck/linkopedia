@@ -13,14 +13,33 @@ function showEditBox(id) {
   }
 }
 
-function drawNetwork(container, nodes, edges) {
+function drawNetwork(containerId, nodes, edges) {
+  var container = document.getElementById(containerId);
   var data = {
     nodes: nodes,
     edges: edges
   };
-  var options = {};
+  var options = {
+    physics: {
+      barnesHut: {
+        avoidOverlap: 1,
+        centralGravity: 0.2
+      }
+    },
+    nodes: {
+      size: 30,
+      color: {
+        background: "#006400"
+      },
+      font: { color: "#333", size: 10 }
+    }
+  };
+
   var network = new vis.Network(container, data, options);
-  console.log(network);
+  network.on("click", function (params) {
+    console.log(params);
+    getAndDrawNetworkFromEntityId(params.nodes[0], containerId);
+  });
 }
 
 function getAndDrawNetworkFromEntityId(entityId, containerId) {
@@ -33,10 +52,9 @@ function getAndDrawNetworkFromEntityId(entityId, containerId) {
       // create node list from rows
       var nodes = new vis.DataSet(res.nodeItems);
       var edges = new vis.DataSet(res.relationItems);
-      var container = document.getElementById(containerId);
 
       // create a network
-      drawNetwork(container, nodes, edges);
+      drawNetwork(containerId, nodes, edges);
     })
     .fail(function(err) {
       console.log("Error: " + err.status);
@@ -60,15 +78,15 @@ function getAndListEntities(containerId) {
 }
 
 function loadEditor(resourceName) {
-    let urlResource = "/"+resourceName+"/list/";
-    $.ajax({
-      url: urlResource
+  let urlResource = "/" + resourceName + "/list/";
+  $.ajax({
+    url: urlResource
+  })
+    .done(function(res) {
+      let editorWindow = document.getElementById("editor-window");
+      editorWindow.innerHTML = res;
     })
-      .done(function(res) {
-        let editorWindow = document.getElementById("editor-window");
-        editorWindow.innerHTML = res;
-      })
-      .fail(function(err) {
-        console.log("Error: " + err.status);
-      });
-  }
+    .fail(function(err) {
+      console.log("Error: " + err.status);
+    });
+}
