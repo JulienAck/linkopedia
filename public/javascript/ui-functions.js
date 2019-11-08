@@ -23,10 +23,16 @@ function drawNetwork(containerId, nodes, edges) {
     nodes: {
       size: 30,
       color: {
-        background: "#006400"
+        border: '#333',
+        background: '#999'
       },
-      font: { color: "#333", size: 10 }
-    }
+      font: { color: "#333", size: 10 },
+      borderWidth:3
+    },
+    edges: {
+      color:"#666"
+    },
+    physics: false
   };
 
   var network = new vis.Network(container, data, options);
