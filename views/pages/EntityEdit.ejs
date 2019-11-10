@@ -1,40 +1,27 @@
-<html>
-  <head>
-    <script
-      type="text/javascript"
-      src="/javascript/vis-network/vis-network.min.js"
-    ></script>
-    <script type="text/javascript" src="/javascript/ui-functions.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
-  </head>
-  <body>
-    <div class="main-column">
-        <% include ../partials/menu %>
-        <div id="main-window">
-            <img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
-            <h1><%-entityData.label %></h1>
-            <% if (entityData.profileimage) { %>
-                <div class="entity-profile-img-container">
-                    <img class="entity-profile-img" src="<%-entityData.profileimage %>" />
-                </div>
-                <% } %>
-            
-            <div>
-                <form action="/entities/update/<%-entityData.id %>" method="post">
-                    Nom <input type="text" name="name" value="<%-entityData.label %>"/>
-                    <br>Type <select name="entityTypeId">
-                            <% for (var j=0; j<entityTypes.length; j++) { %>
-                                <option value="<%-entityTypes[j].id %>" <% if (entityTypes[j].id==entityData.entity_type_id) { %> selected <% } %>><%-entityTypes[j].name %></option>
-                            <% } %>
-                    </select>
-                    <br>Image <input type="text" name="profilePicUrl" value="<%-entityData.profileimage %>"/>
-                    <br><input type="submit" value="Enregistrer" />
-                </form>
-            </div>
+<% include ../partials/header %>
+<% include ../partials/menu %>
+<div id="main-window">
+    <img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
+    <h1><%-entityData.label %></h1>
+    <% if (entityData.profileimage) { %>
+        <div class="entity-profile-img-container">
+            <img class="entity-profile-img" src="<%-entityData.profileimage %>" />
         </div>
-        <div id="editor-window"></div>
-        <br class="clear-both" />
+        <% } %>
+    
+    <div>
+        <form action="/entities/update/<%-entityData.id %>" method="post">
+            Nom <input type="text" name="name" value="<%-entityData.label %>"/>
+            <br>Type <select name="entityTypeId">
+                    <% for (var j=0; j<entityTypes.length; j++) { %>
+                        <option value="<%-entityTypes[j].id %>" <% if (entityTypes[j].id==entityData.entity_type_id) { %> selected <% } %>><%-entityTypes[j].name %></option>
+                    <% } %>
+            </select>
+            <br>Image <input type="text" name="profilePicUrl" value="<%-entityData.profileimage %>"/>
+            <br><input type="submit" value="Enregistrer" />
+        </form>
     </div>
-</body>
-</html>
+</div>
+<div id="editor-window"></div>
+<br class="clear-both" />
+<% include ../partials/footer %>

@@ -104,10 +104,10 @@ function sendEditEntityById(req, res) {
   }
 }
 
-router.get("/view/:id", sendEntityById);
 router.get("/edit/:id", sendEditEntityById);
 router.post("/insertEntity", insertEntity);
 router.post("/update/:id", updateEntity);
 router.get("/list/", listSendEntitiesIndex);
+router.get("/:id", sendEntityById);
 
 module.exports = router;

@@ -12,7 +12,7 @@
         <ul>
         <% for (var i=0; i<entitiesItems.length; i++) { %>
             <li>
-                <a href='#' onclick='getAndDrawNetworkFromEntityId(<%-entitiesItems[i].id %>,"main-window");'><%-entitiesItems[i].name %></a>
+                <a href='/entities/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a>
             </li>
         <% } %>
         </ul>

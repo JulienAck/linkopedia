@@ -38,7 +38,7 @@ function drawNetwork(containerId, nodes, edges) {
   var network = new vis.Network(container, data, options);
   network.on("click", function (params) {
     console.log(params);
-    getAndDrawNetworkFromEntityId(params.nodes[0], containerId);
+    window.location.assign("/entities/"+params.nodes[0])
   });
 }
 
@@ -54,7 +54,6 @@ function getAndDrawNetworkFromEntityId(entityId, containerId) {
       var edges = new vis.DataSet(res.relationItems);
 
       // create a network
-      getAndLoadEntityView(entityId);
       drawNetwork(containerId, nodes, edges);
     })
     .fail(function(err) {
@@ -82,22 +81,6 @@ function loadEditor(resourceName) {
   let urlResource = "/" + resourceName + "/list/";
   $.ajax({
     url: urlResource
-  })
-    .done(function(res) {
-      let editorWindow = document.getElementById("editor-window");
-      editorWindow.innerHTML = res;
-    })
-    .fail(function(err) {
-      console.log("Error: " + err.status);
-    });
-}
-
-function getAndLoadEntityView(entityId) {
-  console.log("getAndLoadEntityView");
-  let urlEntityId = "/entities/view/"+entityId;
-  console.log(urlEntityId);
-  $.ajax({
-    url: urlEntityId
   })
     .done(function(res) {
       let editorWindow = document.getElementById("editor-window");

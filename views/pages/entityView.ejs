@@ -1,9 +1,20 @@
-<img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
-<h1><%-entityData.label %></h1>
-<% if (entityData.profileimage) { %>
-    <div class="entity-profile-img-container">
-        <img class="entity-profile-img" src="<%-entityData.profileimage %>" />
-    </div>
-    <% } %>
+<% include ../partials/header %>
+<% include ../partials/menu %>
 
-<a href="/entities/edit/<%-entityData.id %>">éditer</a>
+<div id="main-window"></div>
+<div id="editor-window">
+    <img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
+    <h1><%-entityData.label %></h1>
+    <% if (entityData.profileimage) { %>
+        <div class="entity-profile-img-container">
+            <img class="entity-profile-img" src="<%-entityData.profileimage %>" />
+        </div>
+        <% } %>
+    
+    <a href="/entities/edit/<%-entityData.id %>">éditer</a>
+</div>
+<br class="clear-both" />
+<script type="text/javascript">
+    getAndDrawNetworkFromEntityId("<%-entityData.id %>","main-window");
+  </script>
+<% include ../partials/footer %>
