@@ -12,19 +12,7 @@
         <ul>
         <% for (var i=0; i<entitiesItems.length; i++) { %>
             <li>
-                <%-entitiesItems[i].name %> | <a href='#' onclick='getAndDrawNetworkFromEntityId(<%-entitiesItems[i].id %>,"current-network");'>carte</a> | <a href='#' onclick='showEditBox(<%-entitiesItems[i].id %>);'>éditer</a>
-                <div id="edit-box-<%-entitiesItems[i].id %>" class="edit-box">
-                        <form action="/entities/updateEntity/<%-entitiesItems[i].id %>" method="post">
-                            Nom <input type="text" name="name" value="<%-entitiesItems[i].name %>"/>
-                            <br>Type <select name="entityTypeId">
-                                    <% for (var j=0; j<entityTypes.length; j++) { %>
-                                        <option value="<%-entityTypes[j].id %>" <% if (entityTypes[j].id==entitiesItems[i].entity_type_id) { %> selected <% } %>><%-entityTypes[j].name %></option>
-                                    <% } %>
-                            </select>
-                            <br>Image <input type="text" name="profilePicUrl" value="<%-entitiesItems[i].profile_pic_url %>"/>
-                            <br><input type="submit" value="Enregistrer" />
-                        </form>
-                </div>
+                <a href='#' onclick='getAndDrawNetworkFromEntityId(<%-entitiesItems[i].id %>,"main-window");'><%-entitiesItems[i].name %></a>
             </li>
         <% } %>
         </ul>

@@ -138,8 +138,8 @@ function listSendRelationsIndex(req, res) {
   });
 }
 
-function APIsendRelationsById(req, res) {
-  console.log("APIsendRelationsById");
+function APIsendRelationsByEntityId(req, res) {
+  console.log("APIsendRelationsByEntityId");
   let searchId = req.params.id;
   if (parseInt(searchId) == searchId) {
     let arrRelations = [];
@@ -167,8 +167,6 @@ function APIsendRelationsById(req, res) {
                 .replace(/destinationid/g, "to")
             )
           );
-          //console.log(relations);
-          //console.log(entities);
           res.send({
             nodeItems: entities,
             relationItems: relations
@@ -182,6 +180,6 @@ function APIsendRelationsById(req, res) {
 router.post("/insertRelation", insertRelation);
 router.post("/updateRelation/:id", updateRelation);
 router.get("/list/", listSendRelationsIndex);
-router.get("/api/:id", APIsendRelationsById);
+router.get("/api/:id", APIsendRelationsByEntityId);
 
 module.exports = router;
