@@ -1,0 +1,6 @@
+<h2>En relation avec</h2>
+<ul>
+<% for (var i=0; i<entityRelations.length; i++) { %>
+    <li><a href="/entities/<%-entityRelations[i].entity_id %>"><%-entityRelations[i].entity_name %></a></li>
+<% } %>
+</ul>

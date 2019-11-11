@@ -23,22 +23,22 @@ function drawNetwork(containerId, nodes, edges) {
     nodes: {
       size: 30,
       color: {
-        border: '#333',
-        background: '#999'
+        border: "#333",
+        background: "#999"
       },
       font: { color: "#333", size: 10 },
-      borderWidth:3
+      borderWidth: 3
     },
     edges: {
-      color:"#666"
+      color: "#666"
     },
-    physics: false
+    physics: true
   };
 
   var network = new vis.Network(container, data, options);
-  network.on("click", function (params) {
+  network.on("click", function(params) {
     console.log(params);
-    window.location.assign("/entities/"+params.nodes[0])
+    window.location.assign("/entities/" + params.nodes[0]);
   });
 }
 
@@ -67,8 +67,33 @@ function getAndListEntities(containerId) {
     url: urlEntities
   })
     .done(function(res) {
-      console.log(res);
+      var container = document.getElementById(containerId);
+      container.innerHTML = res;
+    })
+    .fail(function(err) {
+      console.log("Error: " + err.status);
+    });
+}
 
+function getAndListRelationsByEntity(entityId,containerId) {
+  let urlRelationsByEntity = "/entities/relations/"+entityId;
+  $.ajax({
+    url: urlRelationsByEntity
+  })
+    .done(function(res) {
+      var container = document.getElementById(containerId);
+      container.innerHTML = res;
+    })
+    .fail(function(err) {
+      console.log("Error: " + err.status);
+    });
+}
+function getAndEditRelationsByEntity(entityId,containerId) {
+  let urlRelationsByEntity = "/entities/relations/edit/"+entityId;
+  $.ajax({
+    url: urlRelationsByEntity
+  })
+    .done(function(res) {
       var container = document.getElementById(containerId);
       container.innerHTML = res;
     })

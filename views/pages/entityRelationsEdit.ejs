@@ -1,0 +1,20 @@
+<h2>En relation avec</h2>
+<ul>
+<% for (var i=0; i<relationsItems.length; i++) { %>
+    <li>
+        <form action="/relations/updateRelation/<%-relationsItems[i].entity_id %>" method="post">
+            <select name="entitySourceId">
+                    <% for (var j=0; j<entityItems.length; j++) { %>
+                        <option value="<%-entityItems[j].id %>" <% if (entityItems[j].id==relationsItems[i].entity_source_id) { %> selected <% } %>><%-entityItems[j].name %></option>
+                    <% } %>
+            </select>
+            <select name="entityDestinationId">
+                    <% for (var j=0; j<entityItems.length; j++) { %>
+                        <option value="<%-entityItems[j].id %>" <% if (entityItems[j].id==relationsItems[i].entity_destination_id) { %> selected <% } %>><%-entityItems[j].name %></option>
+                    <% } %>
+            </select>
+            <input type="submit" value="Enregistrer" />
+        </form>
+    </li>
+<% } %>
+</ul>
