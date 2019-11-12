@@ -26,7 +26,11 @@ function insertRelation(req, res) {
     [req.body.entitySourceId, req.body.entityDestinationId],
     (err, sqlResult) => {
       if (err) throw err;
-      res.redirect("/");
+      if (req.body.entitySourceId!=undefined) {
+        res.redirect("/entities/edit/"+req.body.entitySourceId);
+      } else {
+        res.redirect("/");
+      }
     }
   );
 }
@@ -34,13 +38,17 @@ function insertRelation(req, res) {
 function updateRelation(req, res) {
   console.log("updateRelation");
   var sqlBase =
-    "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3 WHERE id=$1";
+   "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3 WHERE id=$1";
   dbConnexion.query(
     sqlBase,
     [req.params.id, req.body.entitySourceId, req.body.entityDestinationId],
     (err, sqlResult) => {
       if (err) throw err;
-      res.redirect("/");
+      if (req.body.returnEntityId!=undefined) {
+        res.redirect("/entities/edit/"+req.body.returnEntityId);
+      } else {
+        res.redirect("/");
+      }
     }
   );
 }
@@ -155,9 +163,28 @@ function APIsendRelationsByEntityId(req, res) {
   }
 }
 
+function deleteRelation(req,res){
+  console.log("deleteRelation");
+  var sqlBase =
+   "DELETE FROM relations WHERE id=$1";
+  dbConnexion.query(
+    sqlBase,
+    [req.params.id],
+    (err, sqlResult) => {
+      if (err) throw err;
+      if (req.body.returnEntityId!=undefined) {
+        res.redirect("/entities/edit/"+req.body.returnEntityId);
+      } else {
+        res.redirect("/");
+      }
+    }
+  );
+}
+
 router.get("/list/", listSendRelationsIndex);
 router.post("/insertRelation", insertRelation);
 router.post("/updateRelation/:id", updateRelation);
 router.get("/api/:id", APIsendRelationsByEntityId);
+router.post("/delete/:id", deleteRelation);
 
 module.exports = router;

@@ -1,8 +1,20 @@
+<h2>Créer une relation avec</h2>
+<form action="/relations/insertRelation" method="post">
+    <input type="hidden" name="entitySourceId" value="<%-currentItemId %>" />
+    <select name="entityDestinationId">
+        <option value="">-Choisir Destination-</option>
+        <% for (var i=0; i<entityItems.length; i++) { %>
+            <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
+        <% } %>
+</select>        
+<input type="submit" value="Créer" />
+</form>
 <h2>En relation avec</h2>
 <ul>
 <% for (var i=0; i<relationsItems.length; i++) { %>
-    <li>
-        <form action="/relations/updateRelation/<%-relationsItems[i].entity_id %>" method="post">
+    <li><b><%-relationsItems[i].id %></b>
+        <form action="/relations/updateRelation/<%-relationsItems[i].id %>" method="post" class="form-edit-entity-relations">
+            <input type="hidden" name="returnEntityId" value="<%-currentItemId %>" />
             <select name="entitySourceId">
                     <% for (var j=0; j<entityItems.length; j++) { %>
                         <option value="<%-entityItems[j].id %>" <% if (entityItems[j].id==relationsItems[i].entity_source_id) { %> selected <% } %>><%-entityItems[j].name %></option>
@@ -14,6 +26,10 @@
                     <% } %>
             </select>
             <input type="submit" value="Enregistrer" />
+        </form>
+        <form action="/relations/delete/<%-relationsItems[i].id %>" method="post" >
+            <input type="hidden" name="returnEntityId" value="<%-currentItemId %>" />
+            <input type="submit" value="Supprimer" />
         </form>
     </li>
 <% } %>

@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const dbConnexion = require("./controllers/database");
 
 function serverListens() {
   console.log("serverListens on " + serverPort);
@@ -9,8 +10,13 @@ function serverListens() {
 
 function sendHomePage(req, res) {
   console.log("sendHomePage");
-  let relationItems = {};
-  res.render("pages/index", { relationItems: relationItems });
+  let sqlAllEntities = "SELECT * FROM entities ORDER BY id DESC LIMIT 1000";
+  dbConnexion.query(sqlAllEntities, (err, entities) => {
+    if (err) throw err;
+      res.render("pages/index", {
+        entitiesItems: entities.rows
+      });
+  });
 }
 
 //App settings and routes

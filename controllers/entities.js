@@ -122,6 +122,7 @@ function sendEditRelationsByEntityId(req, res) {
           if (err) throw err;
           console.log(entityItems);
           res.render("pages/entityRelationsEdit", {
+            currentItemId: searchEntityId,
             entityItems: entityItems.rows,
             relationsItems: relationsItems.rows
           });

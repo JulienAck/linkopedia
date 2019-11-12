@@ -1,23 +1,25 @@
 <% include ../partials/header %>
 <% include ../partials/menu %>
 
-<div id="main-window"></div>
-<div id="editor-window">
-    <img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
-    <h1><%-entityData.label %></h1>
-    <% if (entityData.profileimage) { %>
-        <div class="entity-profile-img-container">
-            <img class="entity-profile-img" src="<%-entityData.profileimage %>" />
-        </div>
-        <% } %>
-    
-    <a href="/entities/edit/<%-entityData.id %>">éditer</a>
-    <br class="clear-both">
-    <div id="entity-relations-window"></div>
+<div id="row-container">
+    <div id="main-window"></div>
+    <div id="editor-window">
+        <img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
+        <h1><%-entityData.label %></h1>
+        <% if (entityData.profileimage) { %>
+            <div class="entity-profile-img-container">
+                <img class="entity-profile-img" src="<%-entityData.profileimage %>" />
+            </div>
+            <% } %>
+        
+        <a href="/entities/edit/<%-entityData.id %>">éditer</a>
+        <br class="clear-both">
+        <div id="entity-relations-window"></div>
+    </div>
 </div>
 <br class="clear-both" />
 <script type="text/javascript">
     getAndDrawNetworkFromEntityId("<%-entityData.id %>","main-window");
     getAndListRelationsByEntity("<%-entityData.id %>","entity-relations-window");
-  </script>
+</script>
 <% include ../partials/footer %>

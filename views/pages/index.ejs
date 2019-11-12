@@ -1,10 +1,18 @@
 <% include ../partials/header %>
 <% include ../partials/menu %>
-  <div id="main-window"></div>
-  <div id="editor-window"></div>
+  <div id="row-container">
+    <div id="main-window">
+      <h1>Entités</h1>
+      <ul>
+      <% for (var i=0; i<entitiesItems.length; i++) { %>
+          <li>
+              <a href='/entities/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a>
+          </li>
+      <% } %>
+      </ul>
+    </div>
+    <div id="editor-window"></div>
+  </div>
   <br class="clear-both" />
 
-  <script type="text/javascript">
-    getAndListEntities("editor-window");
-  </script>
 <% include ../partials/footer %>
