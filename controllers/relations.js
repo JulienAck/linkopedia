@@ -19,38 +19,47 @@ function cleanArrayOfObjects(arrOfObj) {
   return arrOfObj;
 }
 
-function insertRelation(req, res) {
+function insert(req, res) {
   console.log("insertRelation");
+  //we always put the smallest one up front to avoid duplicate relations
+  let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
+  let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   dbConnexion.query(
     "INSERT INTO relations (entity_source_id,entity_destination_id) VALUES ($1, $2)",
-    [req.body.entitySourceId, req.body.entityDestinationId],
+    [id1, id2],
     (err, sqlResult) => {
-      if (err) throw err;
-      if (req.body.entitySourceId!=undefined) {
-        res.redirect("/entities/edit/"+req.body.entitySourceId);
+      //if (err) throw err;
+      if (err) {
+        res.redirect("/relations/");
       } else {
-        res.redirect("/");
+        if (req.body.entitySourceId != undefined) {
+          res.redirect("/entities/edit/" + req.body.entitySourceId);
+        } else {
+          res.redirect("/relations/");
+        }
       }
     }
   );
 }
 
-function updateRelation(req, res) {
+function update(req, res) {
   console.log("updateRelation");
+  //we always put the smallest one up front to avoid duplicate relations
+  let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
+  let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   var sqlBase =
-   "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3 WHERE id=$1";
-  dbConnexion.query(
-    sqlBase,
-    [req.params.id, req.body.entitySourceId, req.body.entityDestinationId],
-    (err, sqlResult) => {
-      if (err) throw err;
-      if (req.body.returnEntityId!=undefined) {
-        res.redirect("/entities/edit/"+req.body.returnEntityId);
+    "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3 WHERE id=$1";
+  dbConnexion.query(sqlBase, [req.params.id, id1, id2], (err, sqlResult) => {
+    if (err) {
+      res.redirect("/relations/");
+    } else {
+      if (req.body.returnEntityId != undefined) {
+        res.redirect("/entities/edit/" + req.body.returnEntityId);
       } else {
         res.redirect("/");
       }
     }
-  );
+  });
 }
 
 function getRelationsEntities(arrEntities, callback) {
@@ -108,7 +117,7 @@ function getRelationsLoop(arrRelations, iterations, counter, callback) {
   });
 }
 
-function listSendRelationsIndex(req, res) {
+function list(req, res) {
   console.log("listSendRelationsIndex");
   let sqlAllRelations =
     "SELECT e1.name as source_name, e2.name as destination_name, r.* FROM entities e1, entities e2, relations r WHERE r.entity_source_id=e1.id AND r.entity_destination_id=e2.id ORDER BY r.id DESC LIMIT 1000";
@@ -117,7 +126,7 @@ function listSendRelationsIndex(req, res) {
     let sqlAllEntities = "SELECT * FROM entities ORDER BY ID DESC LIMIT 1000";
     dbConnexion.query(sqlAllEntities, (err, entities) => {
       if (err) throw err;
-      res.render("pages/relationsList", {
+      res.render("pages/relations", {
         relationsItems: relations.rows,
         entityItems: entities.rows
       });
@@ -163,28 +172,23 @@ function APIsendRelationsByEntityId(req, res) {
   }
 }
 
-function deleteRelation(req,res){
+function remove(req, res) {
   console.log("deleteRelation");
-  var sqlBase =
-   "DELETE FROM relations WHERE id=$1";
-  dbConnexion.query(
-    sqlBase,
-    [req.params.id],
-    (err, sqlResult) => {
-      if (err) throw err;
-      if (req.body.returnEntityId!=undefined) {
-        res.redirect("/entities/edit/"+req.body.returnEntityId);
-      } else {
-        res.redirect("/");
-      }
+  var sqlBase = "DELETE FROM relations WHERE id=$1";
+  dbConnexion.query(sqlBase, [req.params.id], (err, sqlResult) => {
+    if (err) throw err;
+    if (req.body.returnEntityId != undefined) {
+      res.redirect("/entities/edit/" + req.body.returnEntityId);
+    } else {
+      res.redirect("/");
     }
-  );
+  });
 }
 
-router.get("/list/", listSendRelationsIndex);
-router.post("/insertRelation", insertRelation);
-router.post("/updateRelation/:id", updateRelation);
+router.get("/", list);
+router.post("/insertRelation", insert);
+router.post("/updateRelation/:id", update);
 router.get("/api/:id", APIsendRelationsByEntityId);
-router.post("/delete/:id", deleteRelation);
+router.post("/delete/:id", remove);
 
 module.exports = router;

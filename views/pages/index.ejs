@@ -1,18 +1,35 @@
 <% include ../partials/header %>
-<% include ../partials/menu %>
-  <div id="row-container">
-    <div id="main-window">
-      <h1>Entités</h1>
-      <ul>
-      <% for (var i=0; i<entitiesItems.length; i++) { %>
+
+<div id="row-container">
+  <div id="main-window">
+    <h1>Linkopédia</h1>
+    <h2>Les derniers contextes créés</h2>
+    <ul class="inline-list">
+      <% for (var i=0; i<contextItems.length; i++) { %>
           <li>
-              <a href='/entities/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a>
+              <a href='/contexts/edit/<%-contextItems[i].id %>'>
+                <img class='list-image' src='<%-contextItems[i].image_url %>'>
+              </a><br />
+              <a href='/contexts/edit/<%-contextItems[i].id %>'><%-contextItems[i].name %></a><br />
+              <%-contextItems[i].description %>
           </li>
       <% } %>
-      </ul>
-    </div>
-    <div id="editor-window"></div>
+    </ul>
+    <br class="clear-both" />
+    <h2>Les dernières entités créées</h2>
+    <ul class="inline-list">
+      <% for (var i=0; i<entitiesItems.length; i++) { %>
+          <li>
+              <a href='/entities/edit/<%-entitiesItems[i].id %>'>
+                <img class='list-image' src='<%-entitiesItems[i].profile_pic_url %>'>
+              </a><br />
+              <a href='/entities/edit/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a><br />
+              <%-entitiesItems[i].description %>
+          </li>
+      <% } %>
+    </ul>
   </div>
-  <br class="clear-both" />
+</div>
+<br class="clear-both" />
 
 <% include ../partials/footer %>

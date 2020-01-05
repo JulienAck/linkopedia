@@ -1,3 +1,4 @@
+// EDITOR
 function showEditBox(id) {
   var editBoxToShow = document.getElementById("edit-box-" + id);
   if (editBoxToShow != undefined) {
@@ -13,6 +14,21 @@ function showEditBox(id) {
   }
 }
 
+function loadEditor(resourceName) {
+  let urlResource = "/" + resourceName + "/list/";
+  $.ajax({
+    url: urlResource
+  })
+    .done(function(res) {
+      let editorWindow = document.getElementById("editor-window");
+      editorWindow.innerHTML = res;
+    })
+    .fail(function(err) {
+      console.log("Error: " + err.status);
+    });
+}
+
+// DISPLAY NETWORK
 function drawNetwork(containerId, nodes, edges) {
   var container = document.getElementById(containerId);
   var data = {
@@ -61,6 +77,7 @@ function getAndDrawNetworkFromEntityId(entityId, containerId) {
     });
 }
 
+// ENTITIES
 function getAndListEntities(containerId) {
   let urlEntities = "/entities/list/";
   $.ajax({
@@ -75,8 +92,8 @@ function getAndListEntities(containerId) {
     });
 }
 
-function getAndListRelationsByEntity(entityId,containerId) {
-  let urlRelationsByEntity = "/entities/relations/"+entityId;
+function getAndListRelationsByEntity(entityId, containerId) {
+  let urlRelationsByEntity = "/entities/relations/" + entityId;
   $.ajax({
     url: urlRelationsByEntity
   })
@@ -88,28 +105,14 @@ function getAndListRelationsByEntity(entityId,containerId) {
       console.log("Error: " + err.status);
     });
 }
-function getAndEditRelationsByEntity(entityId,containerId) {
-  let urlRelationsByEntity = "/entities/relations/edit/"+entityId;
+function getAndEditRelationsByEntity(entityId, containerId) {
+  let urlRelationsByEntity = "/entities/relations/edit/" + entityId;
   $.ajax({
     url: urlRelationsByEntity
   })
     .done(function(res) {
       var container = document.getElementById(containerId);
       container.innerHTML = res;
-    })
-    .fail(function(err) {
-      console.log("Error: " + err.status);
-    });
-}
-
-function loadEditor(resourceName) {
-  let urlResource = "/" + resourceName + "/list/";
-  $.ajax({
-    url: urlResource
-  })
-    .done(function(res) {
-      let editorWindow = document.getElementById("editor-window");
-      editorWindow.innerHTML = res;
     })
     .fail(function(err) {
       console.log("Error: " + err.status);

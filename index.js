@@ -10,12 +10,17 @@ function serverListens() {
 
 function sendHomePage(req, res) {
   console.log("sendHomePage");
-  let sqlAllEntities = "SELECT * FROM entities ORDER BY id DESC LIMIT 1000";
-  dbConnexion.query(sqlAllEntities, (err, entities) => {
+  let sqlContexts = "SELECT * FROM contexts ORDER BY id DESC LIMIT 6";
+  let sqlEntities = "SELECT * FROM entities ORDER BY id DESC LIMIT 6";
+  dbConnexion.query(sqlContexts, (err, contexts) => {
     if (err) throw err;
+    dbConnexion.query(sqlEntities, (err, entities) => {
+      if (err) throw err;
       res.render("pages/index", {
+        contextItems: contexts.rows,
         entitiesItems: entities.rows
       });
+    });
   });
 }
 

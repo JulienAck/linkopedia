@@ -1,0 +1,28 @@
+<% include ../partials/header %>
+<div id="row-container">
+    <div id="main-window">
+        <h1>Entités</h1>
+        <form action="/entities/insert" method="post">
+            <label>Nom</label> <input type="text" name="name" />
+            <br><label>Type</label> <select name="entityTypeId">
+                    <% for (var i=0; i<entityTypes.length; i++) { %>
+                        <option value="<%-entityTypes[i].id %>"><%-entityTypes[i].name %></option>
+                    <% } %>
+                </select>
+            <br><label>Image</label> <input type="text" name="profilePicUrl" value=""/>
+            <br><input type="submit" value="Créer" />
+        </form>
+        <ul class="inline-list">
+        <% for (var i=0; i<entitiesItems.length; i++) { %>
+            <li>
+                <a href='/entities/edit/<%-entitiesItems[i].id %>'>
+                    <img class='list-image' src='<%-entitiesItems[i].profile_pic_url %>'>
+                  </a><br />
+                <a href='/entities/edit/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a>
+            </li>
+        <% } %>
+        </ul>
+    </div>
+  </div>
+  <br class="clear-both" />
+<% include ../partials/footer %>

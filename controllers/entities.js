@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const dbConnexion = require("./database");
 
-function listSendEntitiesIndex(req, res) {
-  console.log("listSendEntitiesIndex");
+function list(req, res) {
+  console.log("entities::list");
   let sqlAllEntityTypes =
     "SELECT * FROM entity_type ORDER BY id ASC LIMIT 1000";
   let sqlAllEntities = "SELECT * FROM entities ORDER BY id DESC LIMIT 1000";
@@ -12,7 +12,7 @@ function listSendEntitiesIndex(req, res) {
     if (err) throw err;
     dbConnexion.query(sqlAllEntityTypes, (err, entityTypes) => {
       if (err) throw err;
-      res.render("pages/entitiesList", {
+      res.render("pages/entities", {
         entitiesItems: entities.rows,
         entityTypes: entityTypes.rows
       });
@@ -20,8 +20,8 @@ function listSendEntitiesIndex(req, res) {
   });
 }
 
-function insertEntity(req, res) {
-  console.log("insertEntity");
+function insert(req, res) {
+  console.log("entities::insert");
   dbConnexion.query(
     "INSERT INTO entities (id, name,entity_type_id,profile_pic_url) VALUES (nextval(pg_get_serial_sequence('entities', 'id')), $1, $2,$3)",
     [req.body.name, req.body.entityTypeId, req.body.profilePicUrl],
@@ -32,8 +32,8 @@ function insertEntity(req, res) {
   );
 }
 
-function updateEntity(req, res) {
-  console.log("updateEntity");
+function update(req, res) {
+  console.log("entities::update");
   var sqlBase =
     "UPDATE entities SET name=$2, entity_type_id=$3, profile_pic_url=$4 WHERE id=$1";
   dbConnexion.query(
@@ -51,8 +51,8 @@ function updateEntity(req, res) {
   );
 }
 
-function sendEntityById(req, res) {
-  console.log("sendEntityById");
+function show(req, res) {
+  console.log("entities::show");
   let searchEntityId = req.params.id;
   if (parseInt(searchEntityId) == searchEntityId) {
     let sqlEntityById =
@@ -66,8 +66,8 @@ function sendEntityById(req, res) {
   }
 }
 
-function sendEditEntityById(req, res) {
-  console.log("sendEditEntityById");
+function edit(req, res) {
+  console.log("entities::edit");
   let searchEntityId = req.params.id;
   if (parseInt(searchEntityId) == searchEntityId) {
     let sqlAllEntityTypes =
@@ -88,7 +88,7 @@ function sendEditEntityById(req, res) {
 }
 
 function sendListRelationsByEntityId(req, res) {
-  console.log("sendListRelationsByEntityId");
+  console.log("entities::relations::list");
   let searchEntityId = req.params.id;
   if (parseInt(searchEntityId) == searchEntityId) {
     let sqlListRelationsByEntityId =
@@ -107,7 +107,7 @@ function sendListRelationsByEntityId(req, res) {
 }
 
 function sendEditRelationsByEntityId(req, res) {
-  console.log("sendEditRelationsByEntityId");
+  console.log("entities::relations::list::edit");
   let searchEntityId = req.params.id;
   if (parseInt(searchEntityId) == searchEntityId) {
     let sqlListRelationsByEntityId =
@@ -120,7 +120,6 @@ function sendEditRelationsByEntityId(req, res) {
         let sqlListEntities = "SELECT * FROM entities ORDER BY name LIMIT 1000";
         dbConnexion.query(sqlListEntities, (err, entityItems) => {
           if (err) throw err;
-          console.log(entityItems);
           res.render("pages/entityRelationsEdit", {
             currentItemId: searchEntityId,
             entityItems: entityItems.rows,
@@ -132,12 +131,12 @@ function sendEditRelationsByEntityId(req, res) {
   }
 }
 
-router.get("/list/", listSendEntitiesIndex);
+router.get("/", list);
 router.get("/relations/:id", sendListRelationsByEntityId);
 router.get("/relations/edit/:id", sendEditRelationsByEntityId);
-router.post("/insertEntity", insertEntity);
-router.get("/edit/:id", sendEditEntityById);
-router.post("/update/:id", updateEntity);
-router.get("/:id", sendEntityById);
+router.post("/insert", insert);
+router.get("/edit/:id", edit);
+router.post("/update/:id", update);
+router.get("/:id", show);
 
 module.exports = router;

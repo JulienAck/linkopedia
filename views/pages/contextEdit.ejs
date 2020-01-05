@@ -1,0 +1,26 @@
+<% include ../partials/header %>
+  <div id="row-container">
+    <div id="main-window">
+      <h1>Editer un Contexte</h1>
+      <form action="/contexts/update/<%-contextItem.id %>" method="post">
+        Id <%-contextItem.id %>
+        <br /><label>Nom</label> <input type="text" name="name" value="<%-contextItem.name %>" >
+        <br /><label>Description</label> <input type="text" name="description" value="<%-contextItem.description %>" >
+        <br /><label>Image</label> <input type="text" name="image_url" value="<%-contextItem.image_url %>" >
+        <br /><label>En ligne ? </label>
+        <select name="is_live">
+            <% if (contextItem.is_live) { %>
+                <option value="false">Non</option>
+                <option value="true" selected >Oui</option>
+            <% } else { %>
+                <option value="false" selected >Non</option>
+                <option value="true">Oui</option>
+            <% } %>
+        </select>
+        <br /><input type="submit" value="Enregistrer" />
+      </form>
+    </div>
+</div>
+<br class="clear-both" />
+
+<% include ../partials/footer %>
