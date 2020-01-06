@@ -1,5 +1,6 @@
+<br class="clear-both" />
 <h2>Créer une relation avec</h2>
-<form action="/relations/insertRelation" method="post">
+<form action="/relations/insert" method="post">
     <input type="hidden" name="entitySourceId" value="<%-currentItemId %>" />
     <select name="entityDestinationId">
         <option value="">-Choisir Destination-</option>
@@ -13,7 +14,7 @@
 <ul>
 <% for (var i=0; i<relationsItems.length; i++) { %>
     <li><b><%-relationsItems[i].id %></b>
-        <form action="/relations/updateRelation/<%-relationsItems[i].id %>" method="post" class="form-edit-entity-relations">
+        <form action="/relations/update/<%-relationsItems[i].id %>" method="post" class="form-edit-entity-relations">
             <input type="hidden" name="returnEntityId" value="<%-currentItemId %>" />
             <select name="entitySourceId">
                     <% for (var j=0; j<entityItems.length; j++) { %>

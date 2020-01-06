@@ -52,7 +52,6 @@ ul {
   max-width: 100px;
 }
 #row-container {
-  display: flex;
   align-items: stretch;
   background: #eee;
 }
@@ -67,16 +66,9 @@ ul {
   display: inline-block;
 }
 #main-window {
-  flex: 2;
   background: #fff;
   padding: 20px;
   overflow: auto;
-}
-#editor-window {
-  flex: 1;
-  background: #fff;
-  overflow: auto;
-  padding: 20px;
 }
 .entity-profile-img-container {
   width: 100px;
@@ -97,6 +89,10 @@ ul {
   height: 40px;
   float: left;
   margin-right: 10px;
+}
+#entity-relations-window {
+  width:1000px;
+  margin:0 auto 0 auto;
 }
 .inline-list li {
   display: block;

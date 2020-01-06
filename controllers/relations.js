@@ -21,7 +21,7 @@ function cleanArrayOfObjects(arrOfObj) {
 
 function insert(req, res) {
   console.log("insertRelation");
-  //we always put the smallest one up front to avoid duplicate relations
+  //we always put the smallest one up front to avoid unknwon duplicate relations
   let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
   let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   dbConnexion.query(
@@ -30,7 +30,7 @@ function insert(req, res) {
     (err, sqlResult) => {
       //if (err) throw err;
       if (err) {
-        res.redirect("/relations/");
+        throw(err);
       } else {
         if (req.body.entitySourceId != undefined) {
           res.redirect("/entities/edit/" + req.body.entitySourceId);
@@ -44,14 +44,14 @@ function insert(req, res) {
 
 function update(req, res) {
   console.log("updateRelation");
-  //we always put the smallest one up front to avoid duplicate relations
+  //we always put the smallest one up front to avoid unknwon duplicate relations
   let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
   let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   var sqlBase =
     "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3 WHERE id=$1";
   dbConnexion.query(sqlBase, [req.params.id, id1, id2], (err, sqlResult) => {
     if (err) {
-      res.redirect("/relations/");
+      throw(err);
     } else {
       if (req.body.returnEntityId != undefined) {
         res.redirect("/entities/edit/" + req.body.returnEntityId);
@@ -186,8 +186,8 @@ function remove(req, res) {
 }
 
 router.get("/", list);
-router.post("/insertRelation", insert);
-router.post("/updateRelation/:id", update);
+router.post("/insert", insert);
+router.post("/update/:id", update);
 router.get("/api/:id", APIsendRelationsByEntityId);
 router.post("/delete/:id", remove);
 
