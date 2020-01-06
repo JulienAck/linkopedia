@@ -3,19 +3,24 @@
     <div id="main-window">
         <h1>Relations</h1>
         <form action="/relations/insert" method="post">
+            <br><label>Entité 1</label>
             <select name="entitySourceId">
                 <option value="">-Choisir Source-</option>
                 <% for (var i=0; i<entityItems.length; i++) { %>
                     <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
                 <% } %>
             </select>
+            <br><label>Entité 2</label>
             <select name="entityDestinationId">
                 <option value="">-Choisir Destination-</option>
                 <% for (var i=0; i<entityItems.length; i++) { %>
                     <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
                 <% } %>
         </select>        
-        <input type="submit" value="Créer" />
+        <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
+        <br><label>Année de fin</label> <input type="text" name="year_end" type="number"/>
+        <br><label>Libellé</label> <input type="text" name="name" type="text"/>
+        <br><input type="submit" value="Créer" />
         </form>
         <table>
         <% for (var i=0; i<relationsItems.length; i++) { %>

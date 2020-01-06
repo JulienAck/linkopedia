@@ -33,7 +33,30 @@
     </div>
 </div>
 <br class="clear-both" />
-<script type="text/javascript">
-    getAndEditRelationsByEntity("<%-entityData.id %>","entity-relations-window");
-</script>
+<h2>Créer une relation</h2>
+<form action="/relations/insert" method="post">
+    <input type="hidden" name="entitySourceId" value="<%-currentItemId %>" />
+    <label>Avec</label>
+    <select name="entityDestinationId">
+        <option value="">-Choisir Destination-</option>
+        <% for (var i=0; i<entityItems.length; i++) { %>
+            <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
+        <% } %>
+    </select>        
+    <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
+    <br><label>Année de fin</label> <input type="text" name="year_end" type="number"/>
+    <br><label>Libellé</label> <input type="text" name="name" type="text"/>
+    <input type="submit" value="Créer" />
+</form>
+<br class="clear-both" />
+<h2>En relation avec</h2>
+<ul>
+    <% for (var i=0; i<relationsItems.length; i++) { %>
+        <li>
+            <b><%-relationsItems[i].entity_name %></b>
+            <%-relationsItems[i].relation_name %>
+            <%-relationsItems[i].relation_year_begin %> <%-relationsItems[i].relation_year_end %>
+        </li>
+    <% } %>
+</ul>
 <% include ../partials/footer %>

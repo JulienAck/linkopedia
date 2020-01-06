@@ -72,16 +72,38 @@ function edit(req, res) {
   if (parseInt(searchEntityId) == searchEntityId) {
     let sqlAllEntityTypes =
       "SELECT * FROM entity_type ORDER BY id ASC LIMIT 1000";
+    let sqlAllEntities = "SELECT * FROM entities ORDER BY name";
     let sqlEntityById =
       "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profileImage, e.entity_type_id as entity_type_id, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id=$1;";
+    let sqlEntityRelations =
+      "SELECT e.id as entity_id, e.name as entity_name, e.profile_pic_url as profileImage, r.id as relation_id, r.name as relation_name, r.year_begin as relation_year_begin, r.year_end as relation_year_end FROM relations r, entities e WHERE (r.entity_source_id=$1 OR r.entity_destination_id=$1) AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.id!=$1;";
+
     dbConnexion.query(sqlAllEntityTypes, (err, entityTypes) => {
       if (err) throw err;
-      dbConnexion.query(sqlEntityById, [searchEntityId], (err, sqlResult) => {
+      dbConnexion.query(sqlAllEntities, (err, entityItems) => {
         if (err) throw err;
-        res.render("pages/entityEdit", {
-          entityData: sqlResult.rows[0],
-          entityTypes: entityTypes.rows
-        });
+        dbConnexion.query(
+          sqlEntityById,
+          [searchEntityId],
+          (err, entityData) => {
+            if (err) throw err;
+            dbConnexion.query(
+              sqlEntityRelations,
+              [searchEntityId],
+              (err, relationsItems) => {
+                if (err) throw err;
+                console.log(relationsItems.rows);
+                res.render("pages/entityEdit", {
+                  currentItemId: searchEntityId,
+                  entityItems: entityItems.rows,
+                  entityData: entityData.rows[0],
+                  entityTypes: entityTypes.rows,
+                  relationsItems: relationsItems.rows
+                });
+              }
+            );
+          }
+        );
       });
     });
   }

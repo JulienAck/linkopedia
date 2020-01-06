@@ -25,12 +25,12 @@ function insert(req, res) {
   let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
   let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   dbConnexion.query(
-    "INSERT INTO relations (entity_source_id,entity_destination_id) VALUES ($1, $2)",
-    [id1, id2],
+    "INSERT INTO relations (entity_source_id,entity_destination_id,year_begin,year_end,name) VALUES ($1, $2, $3, $4, $5)",
+    [id1, id2, req.body.year_begin, req.body.year_end, req.body.name],
     (err, sqlResult) => {
       //if (err) throw err;
       if (err) {
-        throw(err);
+        throw err;
       } else {
         if (req.body.entitySourceId != undefined) {
           res.redirect("/entities/edit/" + req.body.entitySourceId);
@@ -48,18 +48,22 @@ function update(req, res) {
   let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
   let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   var sqlBase =
-    "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3 WHERE id=$1";
-  dbConnexion.query(sqlBase, [req.params.id, id1, id2], (err, sqlResult) => {
-    if (err) {
-      throw(err);
-    } else {
-      if (req.body.returnEntityId != undefined) {
-        res.redirect("/entities/edit/" + req.body.returnEntityId);
+    "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3, year_begin=$4, year_end=$5, name=$6 WHERE id=$1";
+  dbConnexion.query(
+    sqlBase,
+    [req.params.id, id1, id2, req.body.year_begin, req.body.year_end, req.body.name],
+    (err, sqlResult) => {
+      if (err) {
+        throw err;
       } else {
-        res.redirect("/");
+        if (req.body.returnEntityId != undefined) {
+          res.redirect("/entities/edit/" + req.body.returnEntityId);
+        } else {
+          res.redirect("/");
+        }
       }
     }
-  });
+  );
 }
 
 function getRelationsEntities(arrEntities, callback) {
@@ -134,7 +138,7 @@ function list(req, res) {
   });
 }
 
-function APIsendRelationsByEntityId(req, res) {
+function APIshow(req, res) {
   console.log("APIsendRelationsByEntityId");
   let searchId = req.params.id;
   if (parseInt(searchId) == searchId) {
@@ -188,7 +192,7 @@ function remove(req, res) {
 router.get("/", list);
 router.post("/insert", insert);
 router.post("/update/:id", update);
-router.get("/api/:id", APIsendRelationsByEntityId);
+router.get("/api/:id", APIshow);
 router.post("/delete/:id", remove);
 
 module.exports = router;
