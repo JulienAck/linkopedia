@@ -74,9 +74,9 @@ function edit(req, res) {
       "SELECT * FROM entity_type ORDER BY id ASC LIMIT 1000";
     let sqlAllEntities = "SELECT * FROM entities ORDER BY name";
     let sqlEntityById =
-      "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profileImage, e.entity_type_id as entity_type_id, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id=$1;";
+      "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profile_pic_url, e.entity_type_id as entity_type_id, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id=$1;";
     let sqlEntityRelations =
-      "SELECT e.id as entity_id, e.name as entity_name, e.profile_pic_url as profileImage, r.id as relation_id, r.name as relation_name, r.year_begin as relation_year_begin, r.year_end as relation_year_end FROM relations r, entities e WHERE (r.entity_source_id=$1 OR r.entity_destination_id=$1) AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.id!=$1;";
+      "SELECT e.id as entity_id, e.name as entity_name, e.profile_pic_url as profile_pic_url, r.id as relation_id, r.name as relation_name, r.year_begin as relation_year_begin, r.year_end as relation_year_end FROM relations r, entities e WHERE (r.entity_source_id=$1 OR r.entity_destination_id=$1) AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.id!=$1 ORDER BY e.name ASC;";
 
     dbConnexion.query(sqlAllEntityTypes, (err, entityTypes) => {
       if (err) throw err;
@@ -109,53 +109,7 @@ function edit(req, res) {
   }
 }
 
-function sendListRelationsByEntityId(req, res) {
-  console.log("entities::relations::list");
-  let searchEntityId = req.params.id;
-  if (parseInt(searchEntityId) == searchEntityId) {
-    let sqlListRelationsByEntityId =
-      "SELECT e.id as entity_id, e.name as entity_name, r.* FROM entities e, relations r WHERE (r.entity_source_id=$1 OR r.entity_destination_id=$1) AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.id!=$1 ORDER BY r.id DESC LIMIT 1000";
-    dbConnexion.query(
-      sqlListRelationsByEntityId,
-      [searchEntityId],
-      (err, entityRelations) => {
-        if (err) throw err;
-        res.render("pages/entityRelationsView", {
-          entityRelations: entityRelations.rows
-        });
-      }
-    );
-  }
-}
-
-function sendEditRelationsByEntityId(req, res) {
-  console.log("entities::relations::list::edit");
-  let searchEntityId = req.params.id;
-  if (parseInt(searchEntityId) == searchEntityId) {
-    let sqlListRelationsByEntityId =
-      "SELECT e.id as entity_id, e.name as entity_name, r.* FROM entities e, relations r WHERE (r.entity_source_id=$1 OR r.entity_destination_id=$1) AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.id!=$1 ORDER BY r.id DESC LIMIT 1000";
-    dbConnexion.query(
-      sqlListRelationsByEntityId,
-      [searchEntityId],
-      (err, relationsItems) => {
-        if (err) throw err;
-        let sqlListEntities = "SELECT * FROM entities ORDER BY name LIMIT 1000";
-        dbConnexion.query(sqlListEntities, (err, entityItems) => {
-          if (err) throw err;
-          res.render("pages/entityRelationsEdit", {
-            currentItemId: searchEntityId,
-            entityItems: entityItems.rows,
-            relationsItems: relationsItems.rows
-          });
-        });
-      }
-    );
-  }
-}
-
 router.get("/", list);
-router.get("/relations/:id", sendListRelationsByEntityId);
-router.get("/relations/edit/:id", sendEditRelationsByEntityId);
 router.post("/insert", insert);
 router.get("/edit/:id", edit);
 router.post("/update/:id", update);

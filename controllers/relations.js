@@ -19,6 +19,14 @@ function cleanArrayOfObjects(arrOfObj) {
   return arrOfObj;
 }
 
+function intOrNull(v) {
+  if (parseInt(v) == v) {
+    return v;
+  } else {
+    return null;
+  }
+}
+
 function insert(req, res) {
   console.log("insertRelation");
   //we always put the smallest one up front to avoid unknwon duplicate relations
@@ -26,7 +34,13 @@ function insert(req, res) {
   let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   dbConnexion.query(
     "INSERT INTO relations (entity_source_id,entity_destination_id,year_begin,year_end,name) VALUES ($1, $2, $3, $4, $5)",
-    [id1, id2, req.body.year_begin, req.body.year_end, req.body.name],
+    [
+      id1,
+      id2,
+      intOrNull(req.body.year_begin),
+      intOrNull(req.body.year_end),
+      req.body.name
+    ],
     (err, sqlResult) => {
       //if (err) throw err;
       if (err) {
@@ -42,6 +56,25 @@ function insert(req, res) {
   );
 }
 
+function edit(req, res) {
+  console.log("relations::edit");
+  let id = req.params.id;
+  let returnId = req.query.returnId;
+  let sqlEntities = "SELECT * FROM entities";
+  dbConnexion.query(sqlEntities, (err, entities) => {
+    if (err) throw err;
+    let sqlRelation = "SELECT * FROM relations WHERE id=$1";
+    dbConnexion.query(sqlRelation, [id], (err, relations) => {
+      if (err) throw err;
+      res.render("pages/relationEdit", {
+        returnId: returnId,
+        relationItem: relations.rows[0],
+        entityItems: entities.rows
+      });
+    });
+  });
+}
+
 function update(req, res) {
   console.log("updateRelation");
   //we always put the smallest one up front to avoid unknwon duplicate relations
@@ -51,7 +84,14 @@ function update(req, res) {
     "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3, year_begin=$4, year_end=$5, name=$6 WHERE id=$1";
   dbConnexion.query(
     sqlBase,
-    [req.params.id, id1, id2, req.body.year_begin, req.body.year_end, req.body.name],
+    [
+      req.params.id,
+      id1,
+      id2,
+      intOrNull(req.body.year_begin),
+      intOrNull(req.body.year_end),
+      req.body.name
+    ],
     (err, sqlResult) => {
       if (err) {
         throw err;
@@ -192,6 +232,7 @@ function remove(req, res) {
 router.get("/", list);
 router.post("/insert", insert);
 router.post("/update/:id", update);
+router.get("/edit/:id", edit);
 router.get("/api/:id", APIshow);
 router.post("/delete/:id", remove);
 

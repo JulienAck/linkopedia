@@ -1,0 +1,39 @@
+<% include ../partials/header %>
+  <div id="row-container">
+    <div id="main-window">
+      <h1>Editer une Relation</h1>
+      <form action="/relations/update/<%-relationItem.id %>" method="post">
+        <input type="hidden" name="returnEntityId" value="<%-returnId %>" />
+        Id <%-relationItem.id %>
+        <br><label>De <%-relationItem.entity_source_id %></label>
+        <select name="entitySourceId">
+            <option value="">-Choisir Source-</option>
+            <% for (var i=0; i<entityItems.length; i++) { %>
+                <option value="<%-entityItems[i].id %>" 
+                    <% if (entityItems[i].id==relationItem.entity_source_id) { %>
+                        selected
+                    <% } %> >
+                <%-entityItems[i].name %></option>
+            <% } %>
+        </select>
+        <br><label>Vers <%-relationItem.entity_destination_id %></label>
+        <select name="entityDestinationId">
+            <option value="">-Choisir Destination-</option>
+            <% for (var i=0; i<entityItems.length; i++) { %>
+                <option value="<%-entityItems[i].id %>" 
+                    <% if (entityItems[i].id==relationItem.entity_destination_id) { %>
+                        selected
+                    <% } %> >
+                <%-entityItems[i].name %></option>
+            <% } %>
+        </select>    
+        <br><label>Année de début</label> <input type="text" name="year_begin" type="number" value="<%-relationItem.year_begin %>"/>
+        <br><label>Année de fin</label> <input type="text" name="year_end" type="number" value="<%-relationItem.year_end %>"/>
+        <br><label>Libellé</label> <input type="text" name="name" type="text"/>
+        <br /><input type="submit" value="Enregistrer" />
+      </form>
+    </div>
+</div>
+<br class="clear-both" />
+
+<% include ../partials/footer %>

@@ -53,7 +53,6 @@ ul {
 }
 #row-container {
   align-items: stretch;
-  background: #eee;
 }
 .main-column {
   margin-top: 3em;
@@ -66,9 +65,18 @@ ul {
   display: inline-block;
 }
 #main-window {
+  max-width:1000px;
+  margin:0 auto 0 auto;
   background: #fff;
   padding: 20px;
   overflow: auto;
+}
+#main-window table {
+  width:100%;
+}
+#main-window td {
+  font-size:.8em;
+  border:1px solid #aaa;
 }
 .entity-profile-img-container {
   width: 100px;
@@ -82,6 +90,11 @@ ul {
 .entity-profile-img {
   max-height: 100px;
   max-width: 100px;
+  margin: 0px auto 0px auto;
+}
+.entity-profile-img-small {
+  max-height: 50px;
+  max-width: 50px;
   margin: 0px auto 0px auto;
 }
 .entity-default-icon {

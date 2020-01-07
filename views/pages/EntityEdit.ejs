@@ -6,9 +6,9 @@
             <br>
             <img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
             <h1><%-entityData.label %></h1>
-            <% if (entityData.profileimage) { %>
+            <% if (entityData.profile_pic_url) { %>
             <div class="entity-profile-img-container">
-                <img class="entity-profile-img" src="<%-entityData.profileimage %>" />
+                <img class="entity-profile-img" src="<%-entityData.profile_pic_url %>" />
             </div>
             <% } %>
         
@@ -25,38 +25,45 @@
                 </select>
                 <br>
                 <label for="profilePicUrl">Image</label>
-                <input type="text" name="profilePicUrl" value="<%-entityData.profileimage %>"/>
+                <input type="text" name="profilePicUrl" value="<%-entityData.profile_pic_url %>"/>
                 <br><input type="submit" value="Enregistrer" />
             </form>
         </div>
-        <div id="entity-relations-window"></div>
+        <br class="clear-both" />
+        <h2>Créer une relation</h2>
+        <form action="/relations/insert" method="post">
+            <input type="hidden" name="entitySourceId" value="<%-currentItemId %>" />
+            <label>Avec</label>
+            <select name="entityDestinationId">
+                <option value="">-Choisir Destination-</option>
+                <% for (var i=0; i<entityItems.length; i++) { %>
+                    <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
+                <% } %>
+            </select>        
+            <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
+            <label>Année de fin</label> <input type="text" name="year_end" type="number"/>
+            <br><label>Libellé</label> <input type="text" name="name" type="text"/>
+            <br><input type="submit" value="Créer" />
+        </form>
+        <br class="clear-both" />
+        <h2>En relation avec</h2>
+        <table>
+            <tr><td></td><td>Nom</td><td>Relation</td><td>Débute en</td><td>Se termine en</td><td></td><td></td></tr>
+            <% for (var i=0; i<relationsItems.length; i++) { %>
+                <tr>
+                    <td><% if (relationsItems[i].profile_pic_url) { %>
+                            <img class="entity-profile-img-small" src="<%-relationsItems[i].profile_pic_url %>" />
+                        <% } %></td>
+                    <td><b><a href="/entities/edit/<%-relationsItems[i].entity_id %>"><%-relationsItems[i].entity_name %></a></b></td>
+                    <td><%-relationsItems[i].relation_name %></td>
+                    <td><%-relationsItems[i].relation_year_begin %></td>
+                    <td><%-relationsItems[i].relation_year_end %></td>
+                    <td><a href="/relations/edit/<%-relationsItems[i].relation_id %>?returnId=<%-entityData.id %>">Editer</a></td>
+                    <td><form action="/relations/delete/<%-relationsItems[i].relation_id %>" method="post"><input type="hidden" name="returnEntityId" value="<%-entityData.id %>" /><input type="submit" value="Supprimer"></form></td>
+                </tr>
+            <% } %>
+        </table>
     </div>
 </div>
-<br class="clear-both" />
-<h2>Créer une relation</h2>
-<form action="/relations/insert" method="post">
-    <input type="hidden" name="entitySourceId" value="<%-currentItemId %>" />
-    <label>Avec</label>
-    <select name="entityDestinationId">
-        <option value="">-Choisir Destination-</option>
-        <% for (var i=0; i<entityItems.length; i++) { %>
-            <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
-        <% } %>
-    </select>        
-    <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
-    <br><label>Année de fin</label> <input type="text" name="year_end" type="number"/>
-    <br><label>Libellé</label> <input type="text" name="name" type="text"/>
-    <input type="submit" value="Créer" />
-</form>
-<br class="clear-both" />
-<h2>En relation avec</h2>
-<ul>
-    <% for (var i=0; i<relationsItems.length; i++) { %>
-        <li>
-            <b><%-relationsItems[i].entity_name %></b>
-            <%-relationsItems[i].relation_name %>
-            <%-relationsItems[i].relation_year_begin %> <%-relationsItems[i].relation_year_end %>
-        </li>
-    <% } %>
-</ul>
+
 <% include ../partials/footer %>
