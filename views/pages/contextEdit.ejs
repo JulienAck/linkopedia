@@ -19,6 +19,34 @@
         </select>
         <br /><input type="submit" value="Enregistrer" />
       </form>
+      <br class="clear-both" />
+      <h2>Ajouter une relation</h2>
+      <form action="/contexts/relations/insert" method="post">
+        <input type="hidden" name="context_id" value="<%-contextItem.id %>">
+        <select name="relation_id">
+          <% for (var i=0; i<relationsItems.length; i++) { %>
+            <option value="<%-relationsItems[i].relation_id %>"><%-relationsItems[i].entity_source_name %> - <%-relationsItems[i].entity_destination_name %></option>
+          <% } %>
+        </select>
+        <br /><input type="submit" value="Ajouter" />
+      </form>
+      <br class="clear-both" />
+      <h2>Relations dans ce context</h2>
+      <table>
+        <% for (var i=0; i<contextRelationsItems.length; i++) { %>
+          <tr>
+              <td><%-contextRelationsItems[i].entity_source_name %></td>
+              <td><%-contextRelationsItems[i].entity_destination_name %></td>
+              <td><a href="/relations/edit/<%-contextRelationsItems[i].relation_id %>">Editer</a></td>
+              <td>
+                <form action="/context/relations/delete/<%-contextRelationsItems[i].relation_id %>" method="post">
+                  <input type="hidden" name="returnContextId" value="<%-contextItem.id %>" />
+                  <input type="submit" value="Supprimer">
+                </form>
+              </td>
+          </tr>
+        <% } %>
+      </table>
     </div>
 </div>
 <br class="clear-both" />
