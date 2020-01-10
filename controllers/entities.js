@@ -59,7 +59,7 @@ function show(req, res) {
       "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profileImage, e.entity_type_id as entity_type_id, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id=$1;";
     dbConnexion.query(sqlEntityById, [searchEntityId], (err, sqlResult) => {
       if (err) throw err;
-      res.render("pages/entityView", {
+      res.render("pages/entityShow", {
         entityData: sqlResult.rows[0]
       });
     });

@@ -1,0 +1,12 @@
+<% include ../partials/header %>
+
+<div id="row-container">
+    <h1>Réseau de <%-networkData.label %></h1> <a href="<%-networkData.editUrl %>">éditer</a>
+    <div id="network-window"></div>
+</div>
+<br class="clear-both" />
+<script type="text/javascript">
+    getAndDrawNetworkFromAPI("<%-networkData.apiUrl %>","network-window");
+</script>
+
+<% include ../partials/footer %>

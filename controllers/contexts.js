@@ -86,12 +86,80 @@ function insertRelations(req, res) {
   );
 }
 
+function show(req, res) {
+  console.log("contexts::relations::insert");
+  dbConnexion.query(
+    "SELECT * FROM contexts WHERE id=$1",
+    [req.params.id],
+    (err, contextItem) => {
+      if (err) throw err;
+      var networkData = {};
+      networkData.label = contextItem.rows[0].name;
+      networkData.editUrl = "/contexts/edit/" + req.params.id;
+      networkData.apiUrl = "/contexts/api/" + req.params.id;
+      res.render("pages/networkShow", {
+        networkData: networkData
+      });
+    }
+  );
+}
+
+function cleanObject(obj) {
+  for (var propName in obj) {
+    if (obj[propName] == null) {
+      delete obj[propName];
+    }
+  }
+  return obj;
+}
+
+function cleanArrayOfObjects(arrOfObj) {
+  console.log("cleanArrayOfObjects");
+  for (var i = 0; i < arrOfObj.length; i++) {
+    arrOfObj[i] = cleanObject(arrOfObj[i]);
+  }
+  return arrOfObj;
+}
+
+function APIshow(req, res) {
+  console.log("contexts::api::show");
+  let cid = req.params.id;
+  let sqlrelations =
+    "SELECT r.entity_source_id as sourceid, r.entity_destination_id as destinationid FROM relation_context rc, relations r WHERE rc.context_id=$1 AND r.id=rc.relation_id";
+  dbConnexion.query(sqlrelations, [cid], (err, relationsItems) => {
+    if (err) throw err;
+    let sqlEntities =
+      "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profileImage, et.default_shape as shape, et.default_image_url as defaultImage FROM relation_context rc, relations r, entities e, entity_type as et WHERE rc.context_id=$1 AND r.id=rc.relation_id AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.entity_type_id=et.id";
+    dbConnexion.query(sqlEntities, [cid], (err, entitiesItems) => {
+      if (err) throw err;
+      var entities = cleanArrayOfObjects(entitiesItems.rows);
+      entities.forEach(function(item) {
+        if (item.profileimage) {
+          item.image = item.profileimage;
+        } else {
+          item.image = item.defaultimage;
+        }
+      });
+      var relations = cleanArrayOfObjects(
+        JSON.parse(
+          JSON.stringify(relationsItems.rows)
+            .replace(/sourceid/g, "from")
+            .replace(/destinationid/g, "to")
+        )
+      );
+      res.send({
+        nodeItems: entities,
+        relationItems: relations
+      });
+    });
+  });
+}
+
 router.get("/", list);
 router.post("/insert", insert);
 router.get("/edit/:id", edit);
+router.get("/api/:id", APIshow);
 router.post("/update/:id", update);
 router.post("/relations/insert", insertRelations);
-/*
 router.get("/:id", show);
-*/
 module.exports = router;

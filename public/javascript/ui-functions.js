@@ -76,3 +76,21 @@ function getAndDrawNetworkFromEntityId(entityId, containerId) {
       console.log("Error: " + err.status);
     });
 }
+
+function getAndDrawNetworkFromAPI(apiUrl, containerId) {
+  $.ajax({
+    url: apiUrl
+  })
+    .done(function(res) {
+      console.log(res);
+      // create node list from rows
+      var nodes = new vis.DataSet(res.nodeItems);
+      var edges = new vis.DataSet(res.relationItems);
+
+      // create a network
+      drawNetwork(containerId, nodes, edges);
+    })
+    .fail(function(err) {
+      console.log("Error: " + err.status);
+    });
+}
