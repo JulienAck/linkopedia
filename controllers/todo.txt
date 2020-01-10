@@ -1,0 +1,6 @@
+Editer auto-relations
+Ajouter context dans édition de relations
+Template "show" au lieu de "view"
+Recherche par moteur autocomplete
+multi relations entre 2 entités
+passer relationShow to networkShow
