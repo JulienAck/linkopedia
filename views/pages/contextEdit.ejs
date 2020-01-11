@@ -1,6 +1,8 @@
 <% include ../partials/header %>
   <div id="row-container">
     <div id="main-window">
+      <a href="/contexts/<%-contextItem.id %>">Voir la fiche</a>
+      <br>
       <h1>Editer un Contexte</h1>
       <form action="/contexts/update/<%-contextItem.id %>" method="post">
         Id <%-contextItem.id %>

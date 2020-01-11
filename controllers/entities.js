@@ -56,11 +56,15 @@ function show(req, res) {
   let searchEntityId = req.params.id;
   if (parseInt(searchEntityId) == searchEntityId) {
     let sqlEntityById =
-      "SELECT DISTINCT e.id as id, e.name as label, e.profile_pic_url as profileImage, e.entity_type_id as entity_type_id, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id=$1;";
+      "SELECT DISTINCT e.name as name FROM entities e WHERE e.id=$1;";
     dbConnexion.query(sqlEntityById, [searchEntityId], (err, sqlResult) => {
       if (err) throw err;
-      res.render("pages/entityShow", {
-        entityData: sqlResult.rows[0]
+      var networkData = {};
+      networkData.label = sqlResult.rows[0].name;
+      networkData.editUrl = "/entities/edit/" + req.params.id;
+      networkData.apiUrl = "/relations/api/" + req.params.id;
+      res.render("pages/networkShow", {
+        networkData: networkData
       });
     });
   }
@@ -108,6 +112,7 @@ function edit(req, res) {
     });
   }
 }
+
 
 router.get("/", list);
 router.post("/insert", insert);

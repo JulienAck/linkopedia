@@ -58,26 +58,8 @@ function drawNetwork(containerId, nodes, edges) {
   });
 }
 
-function getAndDrawNetworkFromEntityId(entityId, containerId) {
-  let urlRelations = "/relations/api/" + entityId;
-  $.ajax({
-    url: urlRelations
-  })
-    .done(function(res) {
-      console.log(res);
-      // create node list from rows
-      var nodes = new vis.DataSet(res.nodeItems);
-      var edges = new vis.DataSet(res.relationItems);
-
-      // create a network
-      drawNetwork(containerId, nodes, edges);
-    })
-    .fail(function(err) {
-      console.log("Error: " + err.status);
-    });
-}
-
 function getAndDrawNetworkFromAPI(apiUrl, containerId) {
+  console.log("draw network from "+apiUrl);
   $.ajax({
     url: apiUrl
   })
