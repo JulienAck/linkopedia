@@ -59,7 +59,7 @@ function drawNetwork(containerId, nodes, edges) {
 }
 
 function getAndDrawNetworkFromAPI(apiUrl, containerId) {
-  console.log("draw network from "+apiUrl);
+  console.log("draw network from " + apiUrl);
   $.ajax({
     url: apiUrl
   })
@@ -75,4 +75,44 @@ function getAndDrawNetworkFromAPI(apiUrl, containerId) {
     .fail(function(err) {
       console.log("Error: " + err.status);
     });
+}
+
+function searchFeedDestinationElement(valueItems, searchResultsElementId) {
+  var destinationElement = document.getElementById(searchResultsElementId);
+  if (destinationElement != undefined) {
+    destinationElement.innerHTML="";
+    var resultListElements = document.createElement("ul");
+    for (let i = 0; i < valueItems.length; i++) {
+      var resultItemElement = document.createElement("li");
+      resultItemElement.innerHTML ="<a href='/entities/"+valueItems[i].id+"'><div class='search-result-profile-pic'><img class='' src="+ valueItems[i].profile_pic_url+" /></div>"+valueItems[i].name+"</a>";
+      resultListElements.appendChild(resultItemElement);
+    }
+    resultListElements.appendChild(document.createElement("br"));
+    destinationElement.appendChild(resultListElements);
+  }
+}
+
+function searchValueChanged(valueSearched, searchResultsElementId) {
+  if (valueSearched.length > 2) {
+    $.ajax({
+      url: "/search/entities/" + valueSearched
+    })
+      .done(function(res) {
+        console.log(res);
+        searchFeedDestinationElement(res, searchResultsElementId);
+      })
+      .fail(function(err) {
+        console.log("Search error: " + err.status);
+      });
+  }
+}
+
+function listenSearchAutocompleteQueries(searchResultsElementId) {
+  console.log("listening to search");
+  var searchInputElement = document.getElementById("searchAutoComplete");
+  if (searchInputElement != undefined) {
+    searchInputElement.addEventListener("input", function(evt) {
+      searchValueChanged(this.value,searchResultsElementId);
+    });
+  }
 }

@@ -41,7 +41,7 @@ ul {
   top: 0;
   width: 100%;
   border-bottom: 1px solid #999;
-  height: 2em;
+  height: 50px;
   background:#fff;
 }
 #header-user {
@@ -55,7 +55,7 @@ ul {
   align-items: stretch;
 }
 .main-column {
-  margin-top: 3em;
+  margin-top: 60px;
 }
 .edit-box {
   display: none;
@@ -118,4 +118,47 @@ ul {
 .list-image {
   max-width: 150px;
   max-height: 100px;
+}
+#menu-element {
+  float:left;
+  height:40px;
+  padding:5px;
+}
+#search-element {
+  float:left;
+  width:300px;
+  padding:5px;
+  height:40px;
+}
+#search-results {
+  background:#fff;
+  padding:3px;
+  clear:both;
+}
+#search-results ul {
+  background:#fff;
+  border:1px solid #999;
+}
+#search-results li {
+  clear:both;
+}
+#search-results li a{
+  text-decoration:none;
+  color:#444;
+}
+#search-results li a:hover{
+  background:#333;
+  color:#fff;
+}
+.search-result-profile-pic {
+  width:30px;
+  height:30px;
+  background:#000;
+  text-align:center;
+  margin-right:3px;
+  float:left;
+}
+.search-result-profile-pic img {
+  max-width:90%;
+  max-height:90%;
 }
