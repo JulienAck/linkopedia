@@ -145,8 +145,11 @@ ul {
 #search-results li a{
   text-decoration:none;
   color:#444;
+  display:inline-block;
+  width:100%;
+  height:30px;
 }
-#search-results li a:hover{
+#search-results li a:hover, a:focus{
   background:#333;
   color:#fff;
 }

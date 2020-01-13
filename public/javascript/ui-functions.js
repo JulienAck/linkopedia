@@ -98,7 +98,6 @@ function searchValueChanged(valueSearched, searchResultsElementId) {
       url: "/search/entities/" + valueSearched
     })
       .done(function(res) {
-        console.log(res);
         searchFeedDestinationElement(res, searchResultsElementId);
       })
       .fail(function(err) {
@@ -108,7 +107,6 @@ function searchValueChanged(valueSearched, searchResultsElementId) {
 }
 
 function listenSearchAutocompleteQueries(searchResultsElementId) {
-  console.log("listening to search");
   var searchInputElement = document.getElementById("searchAutoComplete");
   if (searchInputElement != undefined) {
     searchInputElement.addEventListener("input", function(evt) {

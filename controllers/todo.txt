@@ -1,4 +1,6 @@
 Editer auto-relations
 Ajouter context dans édition de relations
-Recherche par moteur autocomplete
+Recherche par moteur autocomplete dans création de relations
+faire disparaitre search result quand perte focus du search
 multi relations entre 2 entités. ou pas ?
+
