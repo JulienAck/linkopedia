@@ -11,8 +11,6 @@
                 <img class="entity-profile-img" src="<%-entityData.profile_pic_url %>" />
             </div>
             <% } %>
-        
-
             <form action="/entities/update/<%-entityData.id %>" method="post">
                 <label for="name">Nom</label>
                 <input type="text" name="name" value="<%-entityData.label %>"/>
@@ -33,13 +31,14 @@
         <h2>Créer une relation</h2>
         <form action="/relations/insert" method="post">
             <input type="hidden" name="entitySourceId" value="<%-currentItemId %>" />
-            <label>Avec</label>
-            <select name="entityDestinationId">
-                <option value="">-Choisir Destination-</option>
-                <% for (var i=0; i<entityItems.length; i++) { %>
-                    <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
-                <% } %>
-            </select>        
+            <div class="search-container">
+                <div class="search-element">
+                    <label>Avec</label><input id="searchEntityAutoComplete" type="text" />
+                    <div id="search-entity-results" class="search-results"></div>
+                </div>
+            </div>
+            <br class="clear-both"><input type="hidden" name="entityDestinationId" id="entity-destination-id">
+            <div id="entity-destination-name"></div>
             <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
             <label>Année de fin</label> <input type="text" name="year_end" type="number"/>
             <br><label>Libellé</label> <input type="text" name="name" type="text"/>
@@ -65,5 +64,7 @@
         </table>
     </div>
 </div>
-
+<script type="text/javascript">
+    listenSearchAutocompleteQueries("searchEntityAutoComplete","search-entity-results","createInput");
+</script>
 <% include ../partials/footer %>

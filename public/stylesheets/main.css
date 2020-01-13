@@ -124,32 +124,34 @@ ul {
   height:40px;
   padding:5px;
 }
-#search-element {
+.search-element {
   float:left;
   width:300px;
   padding:5px;
   height:40px;
 }
-#search-results {
+.search-results {
   background:#fff;
   padding:3px;
   clear:both;
+  position: relative;
+  display: inline-block;
 }
-#search-results ul {
+.search-results ul {
   background:#fff;
   border:1px solid #999;
 }
-#search-results li {
+.search-results li {
   clear:both;
 }
-#search-results li a{
+.search-results li a{
   text-decoration:none;
   color:#444;
   display:inline-block;
   width:100%;
   height:30px;
 }
-#search-results li a:hover, a:focus{
+.search-results li a:hover, a:focus{
   background:#333;
   color:#fff;
 }
