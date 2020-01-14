@@ -81,7 +81,8 @@ function getAndDrawNetworkFromAPI(apiUrl, containerId) {
 function searchFeedDestinationElement(
   valueItems,
   searchResultsElementId,
-  resultAction
+  resultAction,
+  resultDestinationId
 ) {
   var destinationElement = document.getElementById(searchResultsElementId);
   if (destinationElement != undefined) {
@@ -92,7 +93,7 @@ function searchFeedDestinationElement(
       var resultItemLinkElement = document.createElement("a");
       resultItemLinkElement.setAttribute(
         "href",
-        "/entities/" + valueItems[i].id
+        "/entities/edit/" + valueItems[i].id
       );
       var resultItemImgContainerElement = document.createElement("div");
       resultItemImgContainerElement.setAttribute(
@@ -109,22 +110,27 @@ function searchFeedDestinationElement(
       resultItemElement.appendChild(resultItemLinkElement);
       resultListElements.appendChild(resultItemElement);
       if (resultAction == "createInput") {
-        resultItemLinkElement.addEventListener("click", function(event) {
-          event.preventDefault();
-          var entityDestinationIdElement = document.getElementById(
-            "entity-destination-id"
-          );
-          entityDestinationIdElement.value = valueItems[i].id;
-          var entityDestinationIdElement = document.getElementById(
-            "entity-destination-name"
-          );
-          entityDestinationIdElement.innerHTML = valueItems[i].name;
-          var searchEntityAutoCompleteElement = document.getElementById(
-            "searchEntityAutoComplete"
-          );
-          searchEntityAutoCompleteElement.value = "";
-          resultListElements.innerHTML="";
-        });
+        var resultDestinationElement = document.getElementById(
+          resultDestinationId
+        );
+        if (resultDestinationElement != undefined) {
+          resultItemLinkElement.addEventListener("click", function(event) {
+            event.preventDefault();
+            var entityDestinationIdElement = resultDestinationElement.querySelector(
+              "#destination-id"
+            );
+            entityDestinationIdElement.value = valueItems[i].id;
+            var entityDestinationNameElement = resultDestinationElement.querySelector(
+              "#destination-name"
+            );
+            entityDestinationNameElement.innerHTML = "Avec "+valueItems[i].name;
+            var searchEntityAutoCompleteElement = document.getElementById(
+              "searchEntityAutoComplete"
+            );
+            searchEntityAutoCompleteElement.value = "";
+            resultListElements.innerHTML = "";
+          });
+        }
       }
     }
     resultListElements.appendChild(document.createElement("br"));
@@ -135,7 +141,8 @@ function searchFeedDestinationElement(
 function searchValueChanged(
   valueSearched,
   searchResultsElementId,
-  resultAction
+  resultAction,
+  resultDestinationId
 ) {
   if (valueSearched.length > 2) {
     console.log("Search : " + valueSearched);
@@ -143,7 +150,12 @@ function searchValueChanged(
       url: "/search/entities/" + valueSearched
     })
       .done(function(res) {
-        searchFeedDestinationElement(res, searchResultsElementId, resultAction);
+        searchFeedDestinationElement(
+          res,
+          searchResultsElementId,
+          resultAction,
+          resultDestinationId
+        );
       })
       .fail(function(err) {
         console.log("Search error: " + err.status);
@@ -159,12 +171,18 @@ function searchValueChanged(
 function listenSearchAutocompleteQueries(
   searchInputElementId,
   searchResultsElementId,
-  resultAction
+  resultAction,
+  resultDestinationId
 ) {
   var searchInputElement = document.getElementById(searchInputElementId);
   if (searchInputElement != undefined) {
     searchInputElement.addEventListener("input", function(evt) {
-      searchValueChanged(this.value, searchResultsElementId, resultAction);
+      searchValueChanged(
+        this.value,
+        searchResultsElementId,
+        resultAction,
+        resultDestinationId
+      );
     });
   }
 }

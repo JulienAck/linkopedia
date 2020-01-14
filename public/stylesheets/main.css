@@ -167,3 +167,7 @@ ul {
   max-width:90%;
   max-height:90%;
 }
+#result-destination-id {
+  font-size:1em;
+  font-weight:bold;
+}
