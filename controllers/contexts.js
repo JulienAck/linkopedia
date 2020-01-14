@@ -33,7 +33,7 @@ function edit(req, res) {
   let sqlRelations =
     "SELECT r.id as relation_id, e_source.name as entity_source_name, e_destination.name as entity_destination_name FROM relations r, entities e_source, entities e_destination WHERE e_source.id=r.entity_source_id AND e_destination.id=r.entity_destination_id ORDER BY relation_id DESC";
   let sqlContextRelationsItems =
-    "SELECT e_destination.name as entity_destination_name, e_source.name as entity_source_name FROM relation_context rc, relations r, entities e_source, entities e_destination WHERE rc.context_id=$1  AND rc.relation_id=r.id AND e_source.id=r.entity_source_id AND e_destination.id=r.entity_destination_id";
+    "SELECT e_destination.name as entity_destination_name, e_source.name as entity_source_name, r.id as relation_id FROM relation_context rc, relations r, entities e_source, entities e_destination WHERE rc.context_id=$1  AND rc.relation_id=r.id AND e_source.id=r.entity_source_id AND e_destination.id=r.entity_destination_id";
   dbConnexion.query(sqlContext, [id], (err, contextItem) => {
     if (err) throw err;
     dbConnexion.query(sqlRelations, (err, relationsItems) => {
