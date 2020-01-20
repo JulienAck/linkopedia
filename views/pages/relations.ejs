@@ -4,18 +4,17 @@
         <h1>Relations</h1>
         <form action="/relations/insert" method="post">
             <label>Entité 1</label>
-            <select name="entitySourceId">
-                <option value="">-Choisir Source-</option>
-                <% for (var i=0; i<entityItems.length; i++) { %>
-                    <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
-                <% } %>
-            </select>
+            <div id="entity-source-search-container" >
+            </div>
+            <script type="text/javascript">
+                addSearchEntityField("entity-source-search-container","entitySourceId");
+            </script>
             <br><label>Entité 2</label>
-            <select name="entityDestinationId">
-                <option value="">-Choisir Destination-</option>
-                <% for (var i=0; i<entityItems.length; i++) { %>
-                    <option value="<%-entityItems[i].id %>"><%-entityItems[i].name %></option>
-                <% } %>
+            <div id="entity-destination-search-container" >
+            </div>
+            <script type="text/javascript">
+                addSearchEntityField("entity-destination-search-container","entityDestinationId");
+            </script>
         </select>        
         <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
         <br><label>Année de fin</label> <input type="text" name="year_end" type="number"/>

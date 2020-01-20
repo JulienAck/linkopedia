@@ -134,7 +134,7 @@ ul {
   background:#fff;
   padding:3px;
   clear:both;
-  position: relative;
+  position: absolute;
   display: inline-block;
 }
 .search-results ul {
@@ -166,8 +166,4 @@ ul {
 .search-result-profile-pic img {
   max-width:90%;
   max-height:90%;
-}
-#result-destination-id {
-  font-size:1em;
-  font-weight:bold;
 }

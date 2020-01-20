@@ -31,17 +31,12 @@
         <h2>Créer une relation</h2>
         <form action="/relations/insert" method="post">
             <input type="hidden" name="entitySourceId" value="<%-currentItemId %>" />
-            <div class="search-container" >
-                <div class="search-element">
-                    <label>Chercher</label><input id="searchEntityAutoComplete" type="text" />
-                    <div id="search-entity-results" class="search-results"></div>
-                </div>
+            <label>Avec</label>
+            <div id="entity-destination-search-container" >
             </div>
-            <br class="clear-both">
-            <div id="result-destination-id">
-                <input type="hidden" name="entityDestinationId" id="destination-id">
-                <div id="destination-name"></div>
-            </div>
+            <script type="text/javascript">
+                addSearchEntityField("entity-destination-search-container","entityDestinationId");
+            </script>
             <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
             <label>Année de fin</label> <input type="text" name="year_end" type="number"/>
             <br><label>Libellé</label> <input type="text" name="name" type="text"/>
@@ -67,7 +62,4 @@
         </table>
     </div>
 </div>
-<script type="text/javascript">
-    listenSearchAutocompleteQueries("searchEntityAutoComplete","search-entity-results","createInput","result-destination-id");
-</script>
 <% include ../partials/footer %>

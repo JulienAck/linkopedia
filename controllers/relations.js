@@ -63,7 +63,7 @@ function edit(req, res) {
   let sqlEntities = "SELECT * FROM entities";
   dbConnexion.query(sqlEntities, (err, entities) => {
     if (err) throw err;
-    let sqlRelation = "SELECT * FROM relations WHERE id=$1";
+    let sqlRelation = "SELECT r.*, e1.name as entity_source_name, e2.name as entity_destination_name FROM relations r, entities e1, entities e2 WHERE r.id=$1 AND e1.id=r.entity_source_id AND e2.id=r.entity_destination_id";
     dbConnexion.query(sqlRelation, [id], (err, relations) => {
       if (err) throw err;
       res.render("pages/relationEdit", {

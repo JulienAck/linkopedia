@@ -78,111 +78,71 @@ function getAndDrawNetworkFromAPI(apiUrl, containerId) {
 }
 
 // SEARCH
-function searchFeedDestinationElement(
-  valueItems,
-  searchResultsElementId,
-  resultAction,
-  resultDestinationId
-) {
-  var destinationElement = document.getElementById(searchResultsElementId);
-  if (destinationElement != undefined) {
-    destinationElement.innerHTML = "";
-    var resultListElements = document.createElement("ul");
-    for (let i = 0; i < valueItems.length; i++) {
-      var resultItemElement = document.createElement("li");
-      var resultItemLinkElement = document.createElement("a");
-      resultItemLinkElement.setAttribute(
-        "href",
-        "/entities/edit/" + valueItems[i].id
-      );
-      var resultItemImgContainerElement = document.createElement("div");
-      resultItemImgContainerElement.setAttribute(
-        "class",
-        "search-result-profile-pic"
-      );
-      var resultItemImgElement = document.createElement("img");
-      resultItemImgElement.setAttribute("src", valueItems[i].profile_pic_url);
-      resultItemImgContainerElement.appendChild(resultItemImgElement);
-      resultItemLinkElement.appendChild(resultItemImgContainerElement);
-      resultItemLinkElement.appendChild(
-        document.createTextNode(valueItems[i].name)
-      );
-      resultItemElement.appendChild(resultItemLinkElement);
-      resultListElements.appendChild(resultItemElement);
-      if (resultAction == "createInput") {
-        var resultDestinationElement = document.getElementById(
-          resultDestinationId
-        );
-        if (resultDestinationElement != undefined) {
-          resultItemLinkElement.addEventListener("click", function(event) {
-            event.preventDefault();
-            var entityDestinationIdElement = resultDestinationElement.querySelector(
-              "#destination-id"
-            );
-            entityDestinationIdElement.value = valueItems[i].id;
-            var entityDestinationNameElement = resultDestinationElement.querySelector(
-              "#destination-name"
-            );
-            entityDestinationNameElement.innerHTML = "Avec "+valueItems[i].name;
-            var searchEntityAutoCompleteElement = document.getElementById(
-              "searchEntityAutoComplete"
-            );
-            searchEntityAutoCompleteElement.value = "";
-            resultListElements.innerHTML = "";
-          });
+function addSearchEntityField(searchElementId,destinationName,isLink=false) {
+  var searchElement=document.getElementById(searchElementId);
+  if (searchElement!=undefined) {
+    var searchResultField=document.createElement("input");
+    searchResultField.setAttribute("type","hidden");
+    searchResultField.setAttribute("name",destinationName);
+    var searchResultList=document.createElement("div");
+    searchResultList.setAttribute("class","search-results");
+    var searchTextField=document.createElement("input");
+    searchTextField.setAttribute("type","text");
+    searchElement.appendChild(searchTextField);
+    searchTextField.addEventListener("input", function(evt) {
+        if (this.value.length > 2) {
+          searchResultList.innerHTML="";
+          console.log("Search : " + this.value);
+          $.ajax({
+            url: "/search/entities/" + this.value
+          })
+            .done(function(res) {
+              console.log(res);
+              var resultListElements=document.createElement("ul");
+              for (let i = 0; i < res.length; i++) {
+                var resultItemElement = document.createElement("li");
+                var resultItemLinkElement = document.createElement("a");
+                resultItemLinkElement.setAttribute(
+                  "href",
+                  "/entities/edit/" + res[i].id
+                );
+                var resultItemImgContainerElement = document.createElement("div");
+                resultItemImgContainerElement.setAttribute(
+                  "class",
+                  "search-result-profile-pic"
+                );
+                var resultItemImgElement = document.createElement("img");
+                resultItemImgElement.setAttribute("src", res[i].profile_pic_url);
+                resultItemImgContainerElement.appendChild(resultItemImgElement);
+                resultItemLinkElement.appendChild(resultItemImgContainerElement);
+                resultItemLinkElement.appendChild(
+                  document.createTextNode(res[i].name)
+                );
+                if (!isLink) {
+                  resultItemLinkElement.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    searchResultField.value=res[i].id;
+                    searchTextField.value=res[i].name;
+                    searchResultList.innerHTML="";
+                    searchElement.removeChild(searchResultList);
+                  });
+                }
+                resultItemElement.appendChild(resultItemLinkElement);
+                resultListElements.appendChild(resultItemElement);
+              }
+              resultListElements.appendChild(document.createElement("br"));
+              searchResultList.appendChild(resultListElements);
+              searchElement.appendChild(searchResultList);
+              searchElement.appendChild(searchResultField);
+            })
+            .fail(function(err) {
+              console.log("Search error: " + err.status);
+            });
+        } else {
+            searchResultField.value = "";
+            searchResultList.innerHTML="";
+            searchElement.removeChild(searchResultList);
         }
-      }
-    }
-    resultListElements.appendChild(document.createElement("br"));
-    destinationElement.appendChild(resultListElements);
-  }
-}
-
-function searchValueChanged(
-  valueSearched,
-  searchResultsElementId,
-  resultAction,
-  resultDestinationId
-) {
-  if (valueSearched.length > 2) {
-    console.log("Search : " + valueSearched);
-    $.ajax({
-      url: "/search/entities/" + valueSearched
-    })
-      .done(function(res) {
-        searchFeedDestinationElement(
-          res,
-          searchResultsElementId,
-          resultAction,
-          resultDestinationId
-        );
-      })
-      .fail(function(err) {
-        console.log("Search error: " + err.status);
-      });
-  } else {
-    var destinationElement = document.getElementById(searchResultsElementId);
-    if (destinationElement != undefined) {
-      destinationElement.innerHTML = "";
-    }
-  }
-}
-
-function listenSearchAutocompleteQueries(
-  searchInputElementId,
-  searchResultsElementId,
-  resultAction,
-  resultDestinationId
-) {
-  var searchInputElement = document.getElementById(searchInputElementId);
-  if (searchInputElement != undefined) {
-    searchInputElement.addEventListener("input", function(evt) {
-      searchValueChanged(
-        this.value,
-        searchResultsElementId,
-        resultAction,
-        resultDestinationId
-      );
     });
   }
 }
