@@ -13,12 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
     "nodemon": "^1.19.4",
-    "pg": "^7.17.0",
-    "vis-network": "^6.5.0"
+    "pg": "^7.18.2",
+    "vis-network": "^6.5.2",
+    "kind-of": ">=6.0.3"
   }
 }
