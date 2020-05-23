@@ -1,54 +1,63 @@
 <% include ../partials/header %>
   <div id="row-container">
-    <div id="main-window">
-      <a href="/contexts/<%-contextItem.id %>">Voir la fiche</a>
+    <div id="tab-window">
+      <a href="/contexts/<%-contextItem.id %>">Voir le réseau</a>
       <br>
-      <h1>Editer un Contexte</h1>
-      <form action="/contexts/update/<%-contextItem.id %>" method="post">
-        Id <%-contextItem.id %>
-        <br /><label>Nom</label> <input type="text" name="name" value="<%-contextItem.name %>" >
-        <br /><label>Description</label> <input type="text" name="description" value="<%-contextItem.description %>" >
-        <br /><label>Image</label> <input type="text" name="image_url" value="<%-contextItem.image_url %>" >
-        <br /><label>En ligne ? </label>
-        <select name="is_live">
-            <% if (contextItem.is_live) { %>
-                <option value="false">Non</option>
-                <option value="true" selected >Oui</option>
-            <% } else { %>
-                <option value="false" selected >Non</option>
-                <option value="true">Oui</option>
-            <% } %>
-        </select>
-        <br /><input type="submit" value="Enregistrer" />
-      </form>
-      <br class="clear-both" />
-      <h2>Ajouter une relation</h2>
-      <form action="/contexts/relations/insert" method="post">
-        <input type="hidden" name="context_id" value="<%-contextItem.id %>">
-        <select name="relation_id">
-          <% for (var i=0; i<relationsItems.length; i++) { %>
-            <option value="<%-relationsItems[i].relation_id %>"><%-relationsItems[i].entity_source_name %> - <%-relationsItems[i].entity_destination_name %></option>
+      <h1><%-contextItem.name %></h1>
+      <ul>
+        <li><a href="#tab-1">Relations</a></li>
+        <li><a href="#tab-2">Ajouter relation</a></li>
+        <li><a href="#tab-3">Editer</a></li>
+      </ul>
+      <div id="tab-1">
+        <h2>Relations dans ce context</h2>
+        <table>
+          <% for (var i=0; i<contextRelationsItems.length; i++) { %>
+            <tr>
+                <td><%-contextRelationsItems[i].entity_source_name %></td>
+                <td><%-contextRelationsItems[i].entity_destination_name %></td>
+                <td><a href="/relations/edit/<%-contextRelationsItems[i].relation_id %>">Editer</a></td>
+                <td>
+                  <form action="/context/relations/delete/<%-contextRelationsItems[i].relation_id %>" method="post">
+                    <input type="hidden" name="returnContextId" value="<%-contextItem.id %>" />
+                    <input type="submit" value="Supprimer">
+                  </form>
+                </td>
+            </tr>
           <% } %>
-        </select>
-        <br /><input type="submit" value="Ajouter" />
-      </form>
-      <br class="clear-both" />
-      <h2>Relations dans ce context</h2>
-      <table>
-        <% for (var i=0; i<contextRelationsItems.length; i++) { %>
-          <tr>
-              <td><%-contextRelationsItems[i].entity_source_name %></td>
-              <td><%-contextRelationsItems[i].entity_destination_name %></td>
-              <td><a href="/relations/edit/<%-contextRelationsItems[i].relation_id %>">Editer</a></td>
-              <td>
-                <form action="/context/relations/delete/<%-contextRelationsItems[i].relation_id %>" method="post">
-                  <input type="hidden" name="returnContextId" value="<%-contextItem.id %>" />
-                  <input type="submit" value="Supprimer">
-                </form>
-              </td>
-          </tr>
-        <% } %>
-      </table>
+        </table>
+      </div>
+      <div id="tab-2">
+        <h2>Ajouter une relation</h2>
+        <form action="/contexts/relations/insert" method="post">
+          <input type="hidden" name="context_id" value="<%-contextItem.id %>">
+          <select name="relation_id">
+            <% for (var i=0; i<relationsItems.length; i++) { %>
+              <option value="<%-relationsItems[i].relation_id %>"><%-relationsItems[i].entity_source_name %> - <%-relationsItems[i].entity_destination_name %></option>
+            <% } %>
+          </select>
+          <br /><input type="submit" value="Ajouter" />
+        </form>
+      </div>
+      <div id="tab-3">
+        <form action="/contexts/update/<%-contextItem.id %>" method="post">
+          Id <%-contextItem.id %>
+          <br /><label>Nom</label> <input type="text" name="name" value="<%-contextItem.name %>" >
+          <br /><label>Description</label> <input type="text" name="description" value="<%-contextItem.description %>" >
+          <br /><label>Image</label> <input type="text" name="image_url" value="<%-contextItem.image_url %>" >
+          <br /><label>En ligne ? </label>
+          <select name="is_live">
+              <% if (contextItem.is_live) { %>
+                  <option value="false">Non</option>
+                  <option value="true" selected >Oui</option>
+              <% } else { %>
+                  <option value="false" selected >Non</option>
+                  <option value="true">Oui</option>
+              <% } %>
+          </select>
+          <br /><input type="submit" value="Enregistrer" />
+        </form>
+      </div>
     </div>
 </div>
 <br class="clear-both" />

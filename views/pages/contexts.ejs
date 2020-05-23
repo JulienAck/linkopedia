@@ -1,24 +1,32 @@
 <% include ../partials/header %>
   <div id="row-container">
-    <div id="main-window">
+    <div id="tab-window">
       <h1>Contextes</h1>
-      <form action="/contexts/insert" method="post">
-        <label>Nom</label> <input type="text" name="name" />
-        <br><label>Description</label> <input type="text" name="description" />
-        <br><label>Image</label> <input type="text" name="image_url" />
-        <br><input type="submit" value="Créer" />
-      </form>
-      <ul class="inline-list">
-      <% for (var i=0; i<contextItems.length; i++) { %>
-          <li>
-              <a href='/contexts/edit/<%-contextItems[i].id %>'>
-                <img class='list-image' src='<%-contextItems[i].image_url %>'>
-              </a><br />
-              <a href='/contexts/edit/<%-contextItems[i].id %>'><%-contextItems[i].name %></a><br />
-              <%-contextItems[i].description %>
-          </li>
-      <% } %>
+      <ul>
+        <li><a href="#tab-1">Liste</a></li>
+        <li><a href="#tab-2">Créer</a></li>
       </ul>
+      <div id="tab-1">
+        <ul class="inline-list">
+        <% for (var i=0; i<contextItems.length; i++) { %>
+            <li>
+                <a href='/contexts/edit/<%-contextItems[i].id %>'>
+                  <img class='list-image' src='<%-contextItems[i].image_url %>'>
+                </a><br />
+                <a href='/contexts/edit/<%-contextItems[i].id %>'><%-contextItems[i].name %></a><br />
+                <%-contextItems[i].description %>
+            </li>
+        <% } %>
+        </ul>
+      </div>
+      <div id="tab-2">
+        <form action="/contexts/insert" method="post">
+          <label>Nom</label> <input type="text" name="name" />
+          <br><label>Description</label> <input type="text" name="description" />
+          <br><label>Image</label> <input type="text" name="image_url" />
+          <br><input type="submit" value="Créer" />
+        </form>
+      </div>
       <br class="clear-both" />
     </div>
   </div>

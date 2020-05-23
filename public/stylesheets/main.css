@@ -3,6 +3,7 @@ body {
   font-family: Verdana, Geneva, sans-serif;
   font-size: 1em;
   color: #333;
+  background:#999;
 }
 li {
   padding: 5px;
@@ -10,6 +11,16 @@ li {
 }
 h1 {
   margin: 5px;
+}
+a {
+  text-decoration:none;
+  color:#333;
+}
+a:hover {
+  color:#aaa;
+}
+a:visited {
+  color:#333;
 }
 .clear-both {
   clear: both;
@@ -41,7 +52,6 @@ ul {
   top: 0;
   width: 100%;
   border-bottom: 1px solid #999;
-  height: 50px;
   background:#fff;
 }
 #header-user {
@@ -64,19 +74,23 @@ ul {
   margin: 0;
   display: inline-block;
 }
-#main-window {
+#main-window, #tab-window {
   max-width:1000px;
   margin:0 auto 0 auto;
   background: #fff;
   padding: 20px;
   overflow: auto;
 }
-#main-window table {
+table {
   width:100%;
 }
-#main-window td {
+td {
   font-size:.8em;
   border:1px solid #aaa;
+}
+#network-window {
+  width:1080px;
+  height:720px;
 }
 .entity-profile-img-container {
   width: 100px;
@@ -121,8 +135,16 @@ ul {
 }
 #menu-element {
   float:left;
-  height:40px;
-  padding:5px;
+  margin:10px;
+}
+#menu-element a {
+  padding:5px 10px 5px;
+  color:#000;
+  background:#aaa;
+}
+#menu-element a:hover {
+  background:#333;
+  color:#aaa;
 }
 .search-element {
   float:left;

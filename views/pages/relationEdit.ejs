@@ -1,6 +1,6 @@
 <% include ../partials/header %>
   <div id="row-container">
-    <div id="main-window">
+    <div id="tab-window">
       <h1>Editer la Relation entre <%-relationItem.entity_source_name %> et <%-relationItem.entity_destination_name %></h1>
       <form action="/relations/update/<%-relationItem.id %>" method="post">
         <input type="hidden" name="returnEntityId" value="<%-returnId %>" />

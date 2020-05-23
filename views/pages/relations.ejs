@@ -1,33 +1,42 @@
 <% include ../partials/header %>
 <div id="row-container">
-    <div id="main-window">
+    <div id="tab-window">
         <h1>Relations</h1>
-        <form action="/relations/insert" method="post">
-            <label>Entité 1</label>
-            <div id="entity-source-search-container" >
-            </div>
-            <script type="text/javascript">
-                addSearchEntityField("entity-source-search-container","entitySourceId");
-            </script>
-            <br><label>Entité 2</label>
-            <div id="entity-destination-search-container" >
-            </div>
-            <script type="text/javascript">
-                addSearchEntityField("entity-destination-search-container","entityDestinationId");
-            </script>
-        </select>        
-        <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
-        <br><label>Année de fin</label> <input type="text" name="year_end" type="number"/>
-        <br><label>Libellé</label> <input type="text" name="name" type="text"/>
-        <br><input type="submit" value="Créer" />
-        </form>
-        <table>
-        <% for (var i=0; i<relationsItems.length; i++) { %>
-            <tr>
-                <td><%-relationsItems[i].source_name %></td><td><%-relationsItems[i].destination_name %></td>
-            </tr>
-        <% } %>
-        </table>
+        <ul>
+            <li><a href="#tab-1">Liste</a></li>
+            <li><a href="#tab-2">Créer</a></li>
+        </ul>
+        <div id="tab-1">
+            <table>
+                <% for (var i=0; i<relationsItems.length; i++) { %>
+                    <tr>
+                        <td><a href='/entities/edit/<%-relationsItems[i].source_id %>'><%-relationsItems[i].source_name %></a></td>
+                        <td><a href='/entities/edit/<%-relationsItems[i].destination_id %>'><%-relationsItems[i].destination_name %></a></td>
+                    </tr>
+                <% } %>
+                </table>
+        </div>
+        <div id="tab-2">
+            <form action="/relations/insert" method="post">
+                <label>Entité 1</label>
+                <div id="entity-source-search-container" >
+                </div>
+                <script type="text/javascript">
+                    addSearchEntityField("entity-source-search-container","entitySourceId");
+                </script>
+                <br><label>Entité 2</label>
+                <div id="entity-destination-search-container" >
+                </div>
+                <script type="text/javascript">
+                    addSearchEntityField("entity-destination-search-container","entityDestinationId");
+                </script>
+            </select>        
+            <br><label>Année de début</label> <input type="text" name="year_begin" type="number"/>
+            <br><label>Année de fin</label> <input type="text" name="year_end" type="number"/>
+            <br><label>Libellé</label> <input type="text" name="name" type="text"/>
+            <br><input type="submit" value="Créer" />
+            </form>
+        </div>
     </div>
 </div>
 <br class="clear-both" />

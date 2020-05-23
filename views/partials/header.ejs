@@ -7,8 +7,15 @@
     <script type="text/javascript" src="/javascript/ui-functions.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   </head>
   <body>
+    <script>
+      $( function() {
+        $( "#tab-window" ).tabs();
+      } );
+    </script>
     <div id="header">
       <div id="menu-element">
         <a href="/">Linkopédia</a>
@@ -22,6 +29,4 @@
           addSearchEntityField("header-search-result","entityDestinationId",true);
       </script>
     </div>
-    <div class="main-column"></div>
-  </body>
-</html>
+    <div class="main-column">

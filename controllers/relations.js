@@ -164,7 +164,7 @@ function getRelationsLoop(arrRelations, iterations, counter, callback) {
 function list(req, res) {
   console.log("listSendRelationsIndex");
   let sqlAllRelations =
-    "SELECT e1.name as source_name, e2.name as destination_name, r.* FROM entities e1, entities e2, relations r WHERE r.entity_source_id=e1.id AND r.entity_destination_id=e2.id ORDER BY r.id DESC LIMIT 1000";
+    "SELECT e1.name as source_name, e1.id as source_id, e2.name as destination_name, e2.id as destination_id, r.* FROM entities e1, entities e2, relations r WHERE r.entity_source_id=e1.id AND r.entity_destination_id=e2.id ORDER BY r.id DESC LIMIT 1000";
   dbConnexion.query(sqlAllRelations, (err, relations) => {
     if (err) throw err;
     let sqlAllEntities = "SELECT * FROM entities ORDER BY ID DESC LIMIT 1000";
