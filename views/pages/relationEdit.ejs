@@ -7,9 +7,10 @@
         <input type="hidden" name="entitySourceId" value="<%-relationItem.entity_source_id %>" />
         <input type="hidden" name="entityDestinationId" value="<%-relationItem.entity_destination_id %>" />
         Id <%-relationItem.id %>
-        <br><label>Année de début</label> <input type="text" name="year_begin" type="number" value="<%-relationItem.year_begin %>"/>
-        <br><label>Année de fin</label> <input type="text" name="year_end" type="number" value="<%-relationItem.year_end %>"/>
-        <br><label>Libellé</label> <input type="text" name="name" type="text" value="<%-relationItem.name %>"/>
+        <br><label>Année de début</label> <input name="year_begin" type="number" value="<%-relationItem.year_begin %>"/>
+        <br><label>Année de fin</label> <input name="year_end" type="number" value="<%-relationItem.year_end %>"/>
+        <br><label>Libellé</label> <input name="name" type="text" value="<%-relationItem.name %>"/>
+        <br><label>Références</label> <textarea name="detail_references" ><%-relationItem.detail_references %></textarea>
         <br /><input type="submit" value="Enregistrer" />
       </form>
     </div>

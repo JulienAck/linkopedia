@@ -33,13 +33,14 @@ function insert(req, res) {
   let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
   let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   dbConnexion.query(
-    "INSERT INTO relations (entity_source_id,entity_destination_id,year_begin,year_end,name) VALUES ($1, $2, $3, $4, $5)",
+    "INSERT INTO relations (entity_source_id,entity_destination_id,year_begin,year_end,name,detail_references) VALUES ($1, $2, $3, $4, $5, $6)",
     [
       id1,
       id2,
       intOrNull(req.body.year_begin),
       intOrNull(req.body.year_end),
-      req.body.name
+      req.body.name,
+      req.body.detail_references
     ],
     (err, sqlResult) => {
       //if (err) throw err;
@@ -81,7 +82,7 @@ function update(req, res) {
   let id1 = Math.min(req.body.entitySourceId, req.body.entityDestinationId);
   let id2 = Math.max(req.body.entitySourceId, req.body.entityDestinationId);
   var sqlBase =
-    "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3, year_begin=$4, year_end=$5, name=$6 WHERE id=$1";
+    "UPDATE relations SET entity_source_id=$2, entity_destination_id=$3, year_begin=$4, year_end=$5, name=$6, detail_references=$7 WHERE id=$1";
   dbConnexion.query(
     sqlBase,
     [
@@ -90,7 +91,8 @@ function update(req, res) {
       id2,
       intOrNull(req.body.year_begin),
       intOrNull(req.body.year_end),
-      req.body.name
+      req.body.name,
+      req.body.detail_references
     ],
     (err, sqlResult) => {
       if (err) {
