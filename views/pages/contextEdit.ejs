@@ -16,11 +16,11 @@
             <tr>
                 <td><%-contextRelationsItems[i].entity_source_name %></td>
                 <td><%-contextRelationsItems[i].entity_destination_name %></td>
-                <td><a href="/relations/edit/<%-contextRelationsItems[i].relation_id %>">Editer</a></td>
+                <td><a href="/relations/edit/<%-contextRelationsItems[i].relation_id %>">✏️</a></td>
                 <td>
                   <form action="/context/relations/delete/<%-contextRelationsItems[i].relation_id %>" method="post">
                     <input type="hidden" name="returnContextId" value="<%-contextItem.id %>" />
-                    <input type="submit" value="Supprimer">
+                    <input type="submit" value="🗑">
                   </form>
                 </td>
             </tr>

@@ -30,8 +30,8 @@
                             <td><%-relationsItems[i].relation_name %></td>
                             <td><%-relationsItems[i].relation_year_begin %></td>
                             <td><%-relationsItems[i].relation_year_end %></td>
-                            <td><a href="/relations/edit/<%-relationsItems[i].relation_id %>?returnId=<%-entityData.id %>">Editer</a></td>
-                            <td><form action="/relations/delete/<%-relationsItems[i].relation_id %>" method="post"><input type="hidden" name="returnEntityId" value="<%-entityData.id %>" /><input type="submit" value="Supprimer"></form></td>
+                            <td><a href="/relations/edit/<%-relationsItems[i].relation_id %>?returnId=<%-entityData.id %>">✏️</a></td>
+                            <td><form action="/relations/delete/<%-relationsItems[i].relation_id %>" method="post"><input type="hidden" name="returnEntityId" value="<%-entityData.id %>" /><input type="submit" value="🗑"></form></td>
                         </tr>
                     <% } %>
                 </table>

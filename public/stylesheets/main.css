@@ -3,7 +3,6 @@ body {
   font-family: Verdana, Geneva, sans-serif;
   font-size: 1em;
   color: #333;
-  background:#999;
 }
 li {
   padding: 5px;
@@ -41,6 +40,9 @@ select {
 label {
   width: 100px;
   display: inline-block;
+}
+.center-text {
+  text-align:center;
 }
 ul {
   padding:0;
@@ -89,8 +91,9 @@ td {
   border:1px solid #aaa;
 }
 #network-window {
-  width:1080px;
-  height:720px;
+  width:100%;
+  height:auto;
+  max-height:750px;
 }
 .entity-profile-img-container {
   width: 100px;
@@ -123,14 +126,32 @@ td {
 }
 .inline-list li {
   display: block;
+  position:relative;
   float: left;
-  width: 150px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   margin: 0 20px 20px 0;
-  border: 1px solid #aaa;
+  background:#000;
+  color:#fff;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: auto;
+  padding:0;
+}
+.inline-list li a {
+  display:block;
+  position:absolute;
+  bottom:0px;
+  color:#fff;
+  background:rgba(0,0,0,.5);
+  width:100%;
+  padding:10px 0px 10px 0px;
 }
 .list-image {
-  max-width: 150px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 178px;
   max-height: 100px;
 }
 #menu-element {

@@ -4,26 +4,19 @@
   <div id="main-window">
     <h1>Linkopédia</h1>
     <h2>Les derniers contextes créés</h2>
-    <ul class="inline-list">
+    <ul class="inline-list context-items">
       <% for (var i=0; i<contextItems.length; i++) { %>
-          <li>
-              <a href='/contexts/edit/<%-contextItems[i].id %>'>
-                <img class='list-image' src='<%-contextItems[i].image_url %>'>
-              </a><br />
-              <a href='/contexts/edit/<%-contextItems[i].id %>'><%-contextItems[i].name %></a><br />
-              <%-contextItems[i].description %>
+          <li style="background:url(<%-contextItems[i].image_url %>) center no-repeat;background-size:cover;">
+              <a href='/contexts/edit/<%-contextItems[i].id %>'><%-contextItems[i].name %></a>            
           </li>
       <% } %>
     </ul>
     <br class="clear-both" />
     <h2>Les dernières entités créées</h2>
-    <ul class="inline-list">
+    <ul class="inline-list center-text">
       <% for (var i=0; i<entitiesItems.length; i++) { %>
-          <li>
-              <a href='/entities/edit/<%-entitiesItems[i].id %>'>
-                <img class='list-image' src='<%-entitiesItems[i].profile_pic_url %>'>
-              </a><br />
-              <a href='/entities/edit/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a><br />
+          <li style="background:url(<%-entitiesItems[i].profile_pic_url %>) center no-repeat;background-size:cover;">
+              <a href='/entities/edit/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a>
               <%-entitiesItems[i].description %>
           </li>
       <% } %>

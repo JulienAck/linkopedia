@@ -98,10 +98,11 @@ function update(req, res) {
       if (err) {
         throw err;
       } else {
-        if (req.body.returnEntityId != undefined) {
+        console.log("returnEntityId"+req.body.returnEntityId);
+        if (req.body.returnEntityId != undefined && req.body.returnEntityId!= "") {
           res.redirect("/entities/edit/" + req.body.returnEntityId);
         } else {
-          res.redirect("/");
+          res.redirect("/relations");
         }
       }
     }

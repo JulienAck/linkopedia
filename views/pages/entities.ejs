@@ -7,13 +7,11 @@
             <li><a href="#tab-2">Créer</a></li>
         </ul>
         <div id="tab-1">
-            <ul class="inline-list">
+            <ul class="inline-list center-text">
                 <% for (var i=0; i<entitiesItems.length; i++) { %>
-                    <li>
-                        <a href='/entities/edit/<%-entitiesItems[i].id %>'>
-                            <img class='list-image' src='<%-entitiesItems[i].profile_pic_url %>'>
-                          </a><br />
+                    <li style="background:url(<%-entitiesItems[i].profile_pic_url %>) center no-repeat;background-size:cover;">
                         <a href='/entities/edit/<%-entitiesItems[i].id %>'><%-entitiesItems[i].name %></a>
+                        <%-entitiesItems[i].description %>
                     </li>
                 <% } %>
             </ul>
