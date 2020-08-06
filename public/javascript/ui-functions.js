@@ -42,13 +42,25 @@ function drawNetwork(containerId, nodes, edges) {
         border: "#333",
         background: "#999"
       },
-      font: { color: "#333", size: 10 },
+      font: { color: "#333", size: 12 },
+      widthConstraint: {
+        maximum: 120
+      },
       borderWidth: 3
     },
     edges: {
-      color: "#666"
+      color: "#66a",
+      font: {
+        size: 8,
+        color: "#66a",
+        align: "middle"
+      },
+      "smooth": false
     },
-    physics: true
+    physics: false,
+    width: '100%',
+    height: '80%',
+    locale: 'fr'
   };
 
   var network = new vis.Network(container, data, options);

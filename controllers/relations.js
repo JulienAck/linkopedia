@@ -127,7 +127,7 @@ function getEntitiesRelations(arrEntities, callback) {
   let arrEntitiesId = arrEntities.map(({ id }) => id);
   let entitiesList = arrEntitiesId.toString();
   let sqlRelations =
-    "SELECT DISTINCT r.entity_source_id as sourceid, r.entity_destination_id as destinationid FROM relations r WHERE r.entity_source_id IN (" +
+    "SELECT DISTINCT r.entity_source_id as sourceid, r.entity_destination_id as destinationid, r.name as label FROM relations r WHERE r.entity_source_id IN (" +
     entitiesList +
     ") OR r.entity_destination_id IN (" +
     entitiesList +
@@ -144,11 +144,12 @@ function getRelationsLoop(arrRelations, iterations, counter, callback) {
   counter++;
   let relationSources = arrRelations.toString();
   let sqlRelations =
-    "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId FROM relations r WHERE r.entity_source_id IN (" +
+    "SELECT DISTINCT r.entity_source_id as sourceId, r.entity_destination_id as destinationId, r.name as label FROM relations r WHERE r.entity_source_id IN (" +
     relationSources +
     ") OR r.entity_destination_id IN (" +
     relationSources +
     ");";
+  console.log(sqlRelations);  
   dbConnexion.query(sqlRelations, (err, relations) => {
     if (err) throw err;
     if (relations.rows.length > 0 && counter < iterations) {
