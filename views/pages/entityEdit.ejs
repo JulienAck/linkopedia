@@ -4,12 +4,13 @@
         <div>
             <img class="entity-default-icon" src="<%-entityData.defaultimage %>" />
             <h1><%-entityData.label %></h1>
-            <a href="/entities/<%-entityData.id %>">Voir le réseau</a>
             <% if (entityData.profile_pic_url) { %>
             <div class="entity-profile-img-container">
                 <img class="entity-profile-img" src="<%-entityData.profile_pic_url %>" />
             </div>
             <% } %>
+            <p><%-entityData.description %></p>
+            <a href="/entities/<%-entityData.id %>">Voir le réseau</a>
             
             <br class="clear-both" /> 
             <ul>
@@ -20,7 +21,7 @@
             <div id="tab-1">
                 <h2>En relation avec</h2>
                 <table>
-                    <tr><td></td><td>Nom</td><td>Relation</td><td>Débute en</td><td>Se termine en</td><td></td><td></td></tr>
+                    <tr><td></td><td>Nom</td><td>Relation</td><td>Débute en</td><td>Se termine en</td><td>Références</td><td></td><td></td></tr>
                     <% for (var i=0; i<relationsItems.length; i++) { %>
                         <tr>
                             <td><% if (relationsItems[i].profile_pic_url) { %>
@@ -30,6 +31,7 @@
                             <td><%-relationsItems[i].relation_name %></td>
                             <td><%-relationsItems[i].relation_year_begin %></td>
                             <td><%-relationsItems[i].relation_year_end %></td>
+                            <td><%-relationsItems[i].detail_references %></td>
                             <td><a href="/relations/edit/<%-relationsItems[i].relation_id %>?returnId=<%-entityData.id %>">✏️</a></td>
                             <td><form action="/relations/delete/<%-relationsItems[i].relation_id %>" method="post"><input type="hidden" name="returnEntityId" value="<%-entityData.id %>" /><input type="submit" value="🗑"></form></td>
                         </tr>
@@ -57,6 +59,9 @@
                 <form action="/entities/update/<%-entityData.id %>" method="post">
                     <label for="name">Nom</label>
                     <input type="text" name="name" value="<%-entityData.label %>"/>
+                    <br>
+                    <label for="description">Description</label>
+                    <input type="text" name="description" value="<%-entityData.description %>"/>
                     <br>
                     <label for="entityTypeId">Type</label>
                     <select name="entityTypeId">
