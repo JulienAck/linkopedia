@@ -1,4 +1,4 @@
-<% include ../partials/header %>
+<%- include('../partials/header') %>
 
 <div id="row-container">
     <h1>Réseau de <%-networkData.label %>&nbsp;<a href="<%-networkData.editUrl %>">✏️</a></h1> 
@@ -9,4 +9,4 @@
     getAndDrawNetworkFromAPI("<%-networkData.apiUrl %>","network-window");
 </script>
 
-<% include ../partials/footer %>
+<%- include('../partials/footer') %>
