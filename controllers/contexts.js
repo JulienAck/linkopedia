@@ -125,7 +125,7 @@ function APIshow(req, res) {
   console.log("contexts::api::show");
   let cid = req.params.id;
   let sqlrelations =
-    "SELECT r.entity_source_id as sourceid, r.entity_destination_id as destinationid FROM relation_context rc, relations r WHERE rc.context_id=$1 AND r.id=rc.relation_id";
+    "SELECT r.entity_source_id as sourceid, r.entity_destination_id as destinationid, r.name as label FROM relation_context rc, relations r WHERE rc.context_id=$1 AND r.id=rc.relation_id";
   dbConnexion.query(sqlrelations, [cid], (err, relationsItems) => {
     if (err) throw err;
     let sqlEntities =

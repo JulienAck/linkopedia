@@ -51,7 +51,7 @@ function drawNetwork(containerId, nodes, edges) {
     edges: {
       color: "#66a",
       font: {
-        size: 8,
+        size: 10,
         color: "#66a",
         align: "middle"
       },
