@@ -27,7 +27,7 @@ function insert(req, res) {
     [req.body.name, req.description, req.body.entityTypeId, req.body.profilePicUrl],
     (err, sqlResult) => {
       if (err) throw err;
-      res.redirect("/");
+      res.redirect("/entities/");
     }
   );
 }
