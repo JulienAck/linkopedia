@@ -10,7 +10,7 @@ function setDBConnexion() {
   console.log("setDBConnexion");
   console.log(process.env);
   if (process.env.DATABASE_URL) {
-    console.log(process.env.DATABASE_SSL);
+    console.log(process.env.DATABASE_URL);
     if (process.env.DATABASE_SSL!="true") {
       console.log(process.env.DATABASE_SSL);
       var dbConnexion = new pg.Pool({
