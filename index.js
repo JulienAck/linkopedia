@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const dbConnexion = require("./controllers/database");
+console.log("index");
 
 function serverListens() {
   console.log("serverListens on " + serverPort);
@@ -25,6 +26,7 @@ function sendHomePage(req, res) {
 }
 
 //App settings and routes
+
 const app = express();
 app
   .use(express.static(path.join(__dirname, "public")))

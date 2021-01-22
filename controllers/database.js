@@ -8,6 +8,7 @@ function connectSql(err) {
 
 function setDBConnexion() {
   console.log("setDBConnexion");
+  console.log(process.env);
   if (process.env.DATABASE_URL) {
     console.log(process.env.DATABASE_SSL);
     if (process.env.DATABASE_SSL!="true") {
@@ -29,6 +30,7 @@ function setDBConnexion() {
 }
 
 //DB Connect
+console.log("controllers/database");
 var dbConnexion = setDBConnexion();
 dbConnexion.connect(connectSql);
 
