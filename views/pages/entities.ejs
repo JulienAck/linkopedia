@@ -20,15 +20,14 @@
             <form action="/entities/insert" method="post">
                 <label for="name">Nom</label>
                 <input type="text" name="name" />
-                <br>
-                <label for="description">Description</label>
-                <input type="text" name="description" />
+                <br><label for="description">Description</label> <input type="text" name="description" />
                 <br><label>Type</label> <select name="entityTypeId">
                         <% for (var i=0; i<entityTypes.length; i++) { %>
                             <option value="<%-entityTypes[i].id %>"><%-entityTypes[i].name %></option>
                         <% } %>
                     </select>
-                <br><label>Image</label> <input type="text" name="profilePicUrl" value=""/>
+                <br><label>Url Image</label> <input type="text" name="profilePicUrl" value=""/>
+                <br><label for="wikipedia_url">Url Wikipédia (si existe)</label> <input type="text" name="wikipedia_url" />
                 <br><input type="submit" value="Créer" />
             </form>
         </div>

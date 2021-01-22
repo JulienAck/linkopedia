@@ -3,6 +3,7 @@
     <div id="tab-window">
         <h1>Relations</h1>
         <ul>
+            <li><a href="#tab-3">Chercher</a></li>
             <li><a href="#tab-1">Liste</a></li>
             <li><a href="#tab-2">Créer</a></li>
         </ul>
@@ -37,6 +38,25 @@
             <br><label>Libellé</label> <input type="text" name="name" type="text"/>
             <br><label>Références</label> <textarea name="detail_references" type="text"></textarea>
             <br><input type="submit" value="Créer" />
+            </form>
+        </div>
+        <div id="tab-3">
+            <h2>Chercher les relations entre 2 entités</h2>
+            <form action="/relations/find" method="post">
+                <label>Entité 1</label>
+                <div id="entity-1-search-container" >
+                </div>
+                <script type="text/javascript">
+                    addSearchEntityField("entity-1-search-container","entity1Id");
+                </script>
+                <br><label>Entité 2</label>
+                <div id="entity-2-search-container" >
+                </div>
+                <script type="text/javascript">
+                    addSearchEntityField("entity-2-search-container","entity2Id");
+                </script>
+            </select>        
+            <br><input type="submit" value="Chercher" />
             </form>
         </div>
     </div>

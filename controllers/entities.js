@@ -23,8 +23,8 @@ function list(req, res) {
 function insert(req, res) {
   console.log("entities::insert");
   dbConnexion.query(
-    "INSERT INTO entities (id,name,description,entity_type_id,profile_pic_url) VALUES (nextval(pg_get_serial_sequence('entities', 'id')), $1, $2,$3,$4)",
-    [req.body.name, req.description, req.body.entityTypeId, req.body.profilePicUrl],
+    "INSERT INTO entities (id,name,description,entity_type_id,profile_pic_url,wikipedia_url) VALUES (nextval(pg_get_serial_sequence('entities', 'id')), $1, $2,$3,$4,$5)",
+    [req.body.name, req.description, req.body.entityTypeId, req.body.profilePicUrl,req.body.wikipedia_url],
     (err, sqlResult) => {
       if (err) throw err;
       res.redirect("/entities/");
@@ -35,7 +35,7 @@ function insert(req, res) {
 function update(req, res) {
   console.log("entities::update");
   var sqlBase =
-    "UPDATE entities SET name=$2, description=$3, entity_type_id=$4, profile_pic_url=$5 WHERE id=$1";
+    "UPDATE entities SET name=$2, description=$3, entity_type_id=$4, profile_pic_url=$5, wikipedia_url=$6 WHERE id=$1";
   dbConnexion.query(
     sqlBase,
     [
@@ -43,7 +43,8 @@ function update(req, res) {
       req.body.name,
       req.body.description,
       req.body.entityTypeId,
-      req.body.profilePicUrl
+      req.body.profilePicUrl,
+      req.body.wikipedia_url
     ],
     (err, sqlResult) => {
       if (err) throw err;
@@ -79,9 +80,9 @@ function edit(req, res) {
       "SELECT * FROM entity_type ORDER BY id ASC LIMIT 1000";
     let sqlAllEntities = "SELECT * FROM entities ORDER BY name";
     let sqlEntityById =
-      "SELECT DISTINCT e.id as id, e.name as label, e.description as description, e.profile_pic_url as profile_pic_url, e.entity_type_id as entity_type_id, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id=$1;";
+      "SELECT DISTINCT e.id as id, e.name as label, e.description as description, e.wikipedia_description as wikipedia_description, e.profile_pic_url as profile_pic_url, e.wikipedia_url as wikipedia_url, e.entity_type_id as entity_type_id, et.default_shape as shape, et.default_image_url as defaultImage FROM entities e, entity_type as et WHERE e.entity_type_id=et.id AND e.id=$1;";
     let sqlEntityRelations =
-      "SELECT e.id as entity_id, e.name as entity_name, e.profile_pic_url as profile_pic_url, r.id as relation_id, r.name as relation_name, r.year_begin as relation_year_begin, r.year_end as relation_year_end, r.detail_references as detail_references FROM relations r, entities e WHERE (r.entity_source_id=$1 OR r.entity_destination_id=$1) AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.id!=$1 ORDER BY e.name ASC;";
+      "SELECT e.id as entity_id, e.name as entity_name, e.profile_pic_url as profile_pic_url, e.wikipedia_url as wikipedia_url, r.id as relation_id, r.name as relation_name, r.year_begin as relation_year_begin, r.year_end as relation_year_end, r.detail_references as detail_references FROM relations r, entities e WHERE (r.entity_source_id=$1 OR r.entity_destination_id=$1) AND (e.id=r.entity_source_id OR e.id=r.entity_destination_id) AND e.id!=$1 ORDER BY e.name ASC;";
 
     dbConnexion.query(sqlAllEntityTypes, (err, entityTypes) => {
       if (err) throw err;
@@ -113,7 +114,6 @@ function edit(req, res) {
     });
   }
 }
-
 
 router.get("/", list);
 router.post("/insert", insert);

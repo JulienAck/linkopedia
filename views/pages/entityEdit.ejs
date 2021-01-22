@@ -10,6 +10,7 @@
             </div>
             <% } %>
             <p><%-entityData.description %></p>
+            <p><%-entityData.wikipedia_description %></p>
             <a href="/entities/<%-entityData.id %>">Voir le réseau</a>
             
             <br class="clear-both" /> 
@@ -17,6 +18,7 @@
                 <li><a href="#tab-1">Relations</a></li>
                 <li><a href="#tab-2">Ajouter relation</a></li>
                 <li><a href="#tab-3">Editer</a></li>
+                <li><a href="#tab-4">Wikipedia</a></li>
             </ul>
             <div id="tab-1">
                 <h2>En relation avec</h2>
@@ -72,8 +74,15 @@
                     <br>
                     <label for="profilePicUrl">Image</label>
                     <input type="text" name="profilePicUrl" value="<%-entityData.profile_pic_url %>"/>
+                    <br><label for="wikipedia_url">Url Wikipédia (si existe)</label>
+                    <input type="text" name="wikipedia_url"  value="<%-entityData.wikipedia_url %>"/>
                     <br><input type="submit" value="Enregistrer" />
                 </form>
+            </div>
+            <div id="tab-4">
+                <h2>Données Wikipédia</h2>
+                <br /><a href='/wikipedia/createEntitiesFromWPLinks/<%-entityData.id %>'>Créer entités liées</a>
+                <br /><a href='/wikipedia/createRelationsFromWPLinks/<%-entityData.id %>'>Créer relations liées</a>
             </div>
         </div>
         <br class="clear-both" />        

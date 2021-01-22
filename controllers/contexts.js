@@ -87,7 +87,7 @@ function insertRelations(req, res) {
 }
 
 function show(req, res) {
-  console.log("contexts::relations::insert");
+  console.log("contexts::show");
   dbConnexion.query(
     "SELECT * FROM contexts WHERE id=$1",
     [req.params.id],

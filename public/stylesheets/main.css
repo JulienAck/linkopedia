@@ -55,6 +55,7 @@ ul {
   width: 100%;
   border-bottom: 1px solid #999;
   background:#fff;
+  z-index: 10000;
 }
 #header-user {
   float: right;
@@ -209,4 +210,10 @@ td {
 .search-result-profile-pic img {
   max-width:90%;
   max-height:90%;
+}
+.small-profile-pic {
+  max-width:50px;
+  max-height:50px;
+  border:1px solid #000;
+  margin:2px;
 }

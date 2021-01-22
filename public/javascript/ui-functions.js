@@ -37,22 +37,22 @@ function drawNetwork(containerId, nodes, edges) {
   };
   var options = {
     nodes: {
-      size: 30,
+      size: 10,
       color: {
-        border: "#333",
+        border: "#aaa",
         background: "#999"
       },
-      font: { color: "#333", size: 12 },
+      font: { color: "#333", size: 9 },
       widthConstraint: {
         maximum: 120
       },
-      borderWidth: 3
+      borderWidth: 1
     },
     edges: {
-      color: "#66a",
+      color: "#aaa",
       font: {
-        size: 9,
-        color: "#66a",
+        size: 6,
+        color: "#aaa",
         align: "middle"
       },
       "smooth": false
