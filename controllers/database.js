@@ -12,12 +12,12 @@ function setDBConnexion() {
   if (process.env.DATABASE_URL) {
     console.log(process.env.DATABASE_URL);
     if (process.env.DATABASE_SSL!="true") {
-      console.log(process.env.DATABASE_SSL);
+      console.log("DB non SSL");
       var dbConnexion = new pg.Pool({
         connectionString: process.env.DATABASE_URL
       });
     } else {
-      console.log(process.env.DATABASE_URL);
+      console.log("DB SSL");
       var dbConnexion = new pg.Pool({
         connectionString: process.env.DATABASE_URL,
         ssl: true
