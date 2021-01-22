@@ -21,6 +21,6 @@
     "kind-of": ">=6.0.3",
     "nodemon": "^2.0.7",
     "pg": "^8.5.1",
-    "vis-network": "^8.5.6"
+    "vis-network": "^9.0.0"
   }
 }
