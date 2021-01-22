@@ -26,7 +26,7 @@ function sendHomePage(req, res) {
 }
 
 //App settings and routes
-
+console.log("start express")
 const app = express();
 app
   .use(express.static(path.join(__dirname, "public")))
@@ -39,7 +39,8 @@ app
   .set("view engine", "ejs")
   .use(require("./controllers"))
   .get("/", sendHomePage);
-
+  
+console.log("app defined")
 // -- it begins here --//
 let serverPort = process.env.PORT;
 if (serverPort == null || serverPort == "") {
